@@ -1,0 +1,92 @@
+mat-card {
+  margin: auto;
+  width: 600px;
+  margin-top: 50px;
+}
+
+h4,
+h3,
+h5 {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.fb-logo-mini {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.card-header-display-flex {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.mat-form-field {
+  display: block;
+}
+
+.mat-raised-button {
+  font-weight: bold;
+  background: #187697;
+  color: white;
+}
+
+.footer {
+  margin-top: 50px;
+}
+
+.form-control:focus {
+  box-shadow: none !important;
+}
+
+/*material inputs placeholder and underline color*/
+
+/deep/.mat-focused .mat-form-field-label {
+  color: #187697 !important;
+}
+
+/deep/ .mat-focused .mat-form-field-underline .mat-form-field-ripple {
+  background: #187697 !important;
+}
+
+/deep/ .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #187697 !important;
+}
+
+.payment-element {
+  display: flex;
+}
+
+.payment-element p {
+  font-weight: bold;
+}
+
+.payment-element label {
+  margin-left: 20px;
+}
+
+.submission-status {
+  font-size: 16px;
+}
+
+.alert-danger-div {
+  margin: auto;
+  margin-top: 50px;
+  width: 600px;
+}
+
+.payment-header {
+  display: flex;
+}
+
+.payment-header-right {
+  right: 24px;
+  position: absolute;
+}
+
+.payment-data-subtitle {
+  font-weight: bold;
+  -webkit-text-decoration-line: underline;
+  text-decoration-line: underline;
+}

@@ -1,0 +1,41 @@
+{
+    "name": "node-mongo-registration-login-api",
+    "version": "1.0.0",
+    "description": "NodeJS + MongoDB API for User Management, Authentication and Registration",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cornflourblue/node-mongo-registration-login-api.git"
+    },
+    "scripts": {
+        "start": "node server.js",
+        "local": "set API_URL=https://api.sandbox.mkb.hu/payment-init-1.0&& set REDIRECT_URL=http://localhost:4200&& set WELL_KNOWN_URL=https://oidc-1.0.sandbox.mkb.hu/auth/realms/ftb-sandbox/.well-known/openid-configuration&& set CLIENT_ID=demo&& set CLIENT_SECRET=demo&& nodemon ./server.js",
+        "test": "mocha"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.18.3",
+        "chai": "^4.1.2",
+        "cors": "^2.8.4",
+        "crypto": "^1.0.1",
+        "dotenv": "^6.0.0",
+        "express": "^4.16.3",
+        "express-jwt": "^5.3.1",
+        "http-proxy": "^1.17.0",
+        "jsonwebtoken": "^8.2.2",
+        "mocha": "^5.2.0",
+        "mongodb": "^3.0.10",
+        "mongoose": "^5.1.4",
+        "node-jose": "^1.0.0",
+        "openid-client": "^2.2.1",
+        "querystring": "^0.2.0",
+        "request": "^2.87.0",
+        "request-promise": "^4.2.2",
+        "restify-clients": "^2.5.0",
+        "rootpath": "^0.1.2",
+        "vo": "^4.0.2"
+    },
+    "devDependencies": {
+        "nodemon": "^1.17.5"
+    }
+}

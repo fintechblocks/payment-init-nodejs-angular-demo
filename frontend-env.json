@@ -1,0 +1,4 @@
+{
+  "production": true,
+  "apiUrl": "http://payment-init-backend.ftb-local/payment-init-1.0"
+}

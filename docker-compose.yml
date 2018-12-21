@@ -1,0 +1,48 @@
+version: "2"
+
+services:
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+      - 80:80
+
+  frontend:
+    build: ./frontend
+    restart: on-failure
+    expose:
+      - 4200
+    environment:
+      - VIRTUAL_HOST=${FRONTEND_HOST}
+    volumes:
+      - ./frontend-env.json:/usr/share/nginx/html/assets/environments/environment.json
+    links:
+      - backend
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    restart: on-failure
+    expose:
+      - 8080
+    environment:
+      - VIRTUAL_HOST=${BACKEND_HOST}
+      - REDIRECT_URL=${REDIRECT_URL}
+      - WELL_KNOWN_URL=${OIDC_WELL_KNOWN_URL}
+      - MONGO_CONNECTION=mongodb://mongodb:27017/demo
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - API_URL=${PAYMENT_INIT_API_URL}
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - CLIENT_ID=${CLIENT_ID}
+      - PORT=8080
+
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
