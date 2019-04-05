@@ -1,17 +1,10 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
-import {
-  HttpClient, HttpHeaders, HttpParams,
-  HttpResponse, HttpEvent
-} from '@angular/common/http';
-import { CustomHttpUrlEncodingCodec } from '../encoder';
-
 import { Observable } from 'rxjs';
 
-import { ErrorResponse } from '../model/errorResponse';
-
-import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
-
+import { CustomHttpUrlEncodingCodec } from '../encoder';
+import { BASE_PATH } from '../variables';
 import { environment } from './../../../environments/environment';
 
 @Injectable()
@@ -98,12 +91,12 @@ export class AuthorizationService {
   }
 
 
-  public getAuthorizationUrl(PaymentId): Observable<any> {
+  public getAuthorizationUrl(ConsentId): Observable<any> {
 
     let headers = this.defaultHeaders;
     let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
-    if (PaymentId !== undefined) {
-      queryParameters = queryParameters.set('PaymentId', PaymentId);
+    if (ConsentId !== undefined) {
+      queryParameters = queryParameters.set('ConsentId', ConsentId);
   }
     // authentication (PSUOAuth2Security) required
     if (this.configuration.accessToken) {

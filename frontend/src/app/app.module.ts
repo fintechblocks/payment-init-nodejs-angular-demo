@@ -1,22 +1,43 @@
-import { AlertComponent } from './_directives';
-import { AlertService } from './_services';
-import { ErrorInterceptor } from './_helpers';
-import { AuthorizationService } from './http/api/authorization.service';
-import { BrowserModule } from '@angular/platform-browser';
+import { HelpersService } from './_services/helpers.service';
+import { LocalStorageService } from './_services/local.storage.service';
+import { InternationalScheduledPaymentsComponent } from './controllers/international-scheduled-payment/international.scheduled.payments';
+import { BatchInternationalPaymentsComponent } from './controllers/batch-international-payments/batch.international.payments';
+import { InternationalPaymentsComponent } from './controllers/international-payments/international.payments';
+import { BatchDomesticPaymentsComponent } from './controllers/batch-domestic-payments/batch.domestic.payments';
+import { DomesticStandingOrderComponent } from './controllers/domestic-standing-order/domestic.standing.order';
+import { DomesticScheduledPaymentsComponent } from './controllers/domestic-scheduled-payment/domestic.scheduled.payments';
+import { DomesticPaymentsComponent } from './controllers/domestic-payments/domestic.payments';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatPaginatorModule, MatTableModule, MatExpansionModule } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatInputModule, MatCardModule, MatCheckboxModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ApiModule } from './http/api.module';
-import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { AuthorizationService } from './http/api/authorization.service';
+import { AlertComponent } from './_directives';
+import { ErrorInterceptor } from './_helpers';
+import { ExampleService } from './_helpers/example/example.service';
+import { AlertService } from './_services';
+import { ShowJsonDataDialog } from './controllers/dialogs/show.json.data.dialog';
+import { StorageServiceModule } from 'angular-webstorage-service';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent,    
-    AlertComponent
+    AppComponent,
+    AlertComponent,
+    ShowJsonDataDialog,
+    DomesticPaymentsComponent,
+    DomesticScheduledPaymentsComponent,
+    DomesticStandingOrderComponent,
+    BatchDomesticPaymentsComponent,
+    InternationalPaymentsComponent,
+    BatchInternationalPaymentsComponent,
+    InternationalScheduledPaymentsComponent
   ],
   imports: [
     BrowserModule,
@@ -28,12 +49,24 @@ import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common
     MatCardModule,
     MatCheckboxModule,
     FormsModule,
+    MatDialogModule,
+    MatPaginatorModule,
     ReactiveFormsModule,
+    MatTableModule, 
+    MatExpansionModule,
+    StorageServiceModule,
     RouterModule.forRoot([]),
   ],
   providers: [
     AlertService,
+    AuthorizationService,
+    ExampleService,   
+    LocalStorageService,
+    HelpersService, 
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
+  entryComponents: [
+    ShowJsonDataDialog
   ],
   bootstrap: [AppComponent]
 })

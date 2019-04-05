@@ -1,0 +1,341 @@
+<mat-card>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="consent_id ? true :false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Domestic Standing Order Consent
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-accordion>
+        <mat-expansion-panel class="nested-accordion create">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Create Domestic Standing Order Consent
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="payment-header">
+            <div class="payment-header-right">
+              <mat-checkbox [(ngModel)]="consentDeptorChecked">With debtor data</mat-checkbox>
+            </div>
+          </div>
+          <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createPaymentConsent()">
+            <h5>Initiation</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="initiationFrequency" class="form-control"
+                formControlName="initiationFrequency" [formGroup]="paymentForm" placeholder="Initiation Frequency">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="initiationReference" class="form-control"
+                formControlName="initiationReference" [formGroup]="paymentForm" placeholder="Initiation Reference">
+            </mat-form-field>
+            <h5>Creditor account</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
+                formControlName="creditorAccountIdentification" [formGroup]="paymentForm"
+                placeholder="Creditor account identification">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="name" class="form-control" formControlName="creditorAccountName"
+                [formGroup]="paymentForm" placeholder="Creditor account name">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
+                formControlName="creditorAccountSchemeName" [formGroup]="paymentForm"
+                placeholder="Creditor account scheme name">
+            </mat-form-field>
+            <h5>First Payment Data</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="firstPaymentDateTime" class="form-control"
+                formControlName="firstPaymentDateTime" [formGroup]="paymentForm" placeholder="First Payment Date Time">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="firstPaymentAmount" class="form-control"
+                formControlName="firstPaymentAmount" [formGroup]="paymentForm" placeholder="First Payment Amount">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="firstPaymentCurrency" class="form-control"
+                formControlName="firstPaymentCurrency" [formGroup]="paymentForm" placeholder="First Payment Currency">
+            </mat-form-field>
+            <h5>Recurring Payment Data</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="recurringPaymentFirstPaymentAmount" class="form-control"
+                formControlName="recurringPaymentFirstPaymentAmount" [formGroup]="paymentForm"
+                placeholder="Recurring Payment First Payment Amount">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="recurringPaymentFirstPaymentCurrency" class="form-control"
+                formControlName="recurringPaymentFirstPaymentCurrency" [formGroup]="paymentForm"
+                placeholder="Recurring Payment First Payment Currency">
+            </mat-form-field>
+            <h5>Final Payment</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="finalPaymentDateTime" class="form-control"
+                formControlName="finalPaymentDateTime" [formGroup]="paymentForm" placeholder="Final Payment Date Time">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="finalPaymentAmount" class="form-control"
+                formControlName="finalPaymentAmount" [formGroup]="paymentForm" placeholder="Final Payment Amount">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="finalPaymentCurrency" class="form-control"
+                formControlName="finalPaymentCurrency" [formGroup]="paymentForm" placeholder="Final Payment Currency">
+            </mat-form-field>
+            <div *ngIf="consentDeptorChecked">
+              <h5>Debtor account</h5>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
+                  formControlName="debtorAccountSchemeName" [formGroup]="paymentForm"
+                  placeholder="Debtor account scheme name">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
+                  formControlName="debtorAccountIdentification" [formGroup]="paymentForm"
+                  placeholder="Debtor account identification">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="debtorAccountName" class="form-control"
+                  formControlName="debtorAccountName" [formGroup]="paymentForm" placeholder="Debtor account name">
+              </mat-form-field>
+            </div>
+            <button type="submit" mat-raised-button>{{'create' | uppercase}}</button>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion>
+        <mat-expansion-panel class="nested-accordion get" [expanded]="consent_id ? true :false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Get Domestic Standing Order Consent
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="get-payment-header">
+            <p class="get-payment-title">Domestic Standing Order Consent by consent ID</p>
+          </div>
+          <div>
+            <h6>Consent ID</h6>
+            <mat-form-field class="example-full-width">
+              <input class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #consentId>
+            </mat-form-field>
+          </div>
+          <button name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
+            class="header-button-right" [disabled]="consentId.value.length == 0"
+            (click)="getPaymentConsent(consentId.value)">{{'Get
+                          data' | uppercase}}</button>
+          <mat-card-content>
+            <div *ngIf="domesticPaymentConsentDataSource">
+              <mat-table id="account-by-id-table" #table [dataSource]="domesticPaymentConsentDataSource">
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef>Status </mat-header-cell>
+                  <mat-cell id="account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="firstPaymentDateTime">
+                  <mat-header-cell *matHeaderCellDef> FirstPaymentDateTime </mat-header-cell>
+                  <mat-cell id="consent-firstPaymentDateTime" *matCellDef="let element"
+                    class="firstPaymentDateTime-table-cell">
+                    {{element.Initiation.FirstPaymentDateTime | date: 'yyyy-MM-dd'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="finalPaymentDateTime">
+                  <mat-header-cell *matHeaderCellDef> FinalPaymentDateTime </mat-header-cell>
+                  <mat-cell id="consent-finalPaymentDateTime" *matCellDef="let element">
+                    {{element.Initiation.FinalPaymentDateTime | date: 'yyyy-MM-dd'}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="arrow">
+                  <mat-header-cell *matHeaderCellDef> Open data details </mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="arrow-center">
+                    <button mat-icon-button (click)="openDataDetails(element)">
+                      <i class="material-icons right">
+                        arrow_forward_ios
+                      </i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="domesticPaymentConsentDisplayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: domesticPaymentConsentDisplayedColumns;"></mat-row>
+              </mat-table>
+              <div *ngIf="isEmptyAccountsById" class="empty-result-text">No results.</div>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+          </mat-card-content>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card>
+<mat-card>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Domestic Standing Order
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngIf="domesticPaymentPaymentId">
+        <p>Payment ID:</p>
+        <p>{{domesticPaymentPaymentId}}</p>
+      </div>
+      <mat-accordion>
+        <mat-expansion-panel class="nested-accordion create">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Create Domestic Standing Order
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="payment-header">
+            <div class="payment-header-right">
+              <mat-checkbox [(ngModel)]="deptorChecked">With debtor data</mat-checkbox>
+            </div>
+          </div>
+          <div>
+            <h6>Consent ID</h6>
+            <mat-form-field class="example-full-width" class="param-input">
+              <input class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #createdConsentId>
+            </mat-form-field>
+          </div>
+
+          <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createPayment(createdConsentId.value)">
+            <h5>Initiation</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="initiationFrequency" class="form-control"
+                formControlName="initiationFrequency" [formGroup]="paymentForm" placeholder="Initiation Frequency">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="initiationReference" class="form-control"
+                formControlName="initiationReference" [formGroup]="paymentForm" placeholder="Initiation Reference">
+            </mat-form-field>
+            <h5>Creditor account</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
+                formControlName="creditorAccountIdentification" [formGroup]="paymentForm"
+                placeholder="Creditor account identification">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="name" class="form-control" formControlName="creditorAccountName"
+                [formGroup]="paymentForm" placeholder="Creditor account name">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
+                formControlName="creditorAccountSchemeName" [formGroup]="paymentForm"
+                placeholder="Creditor account scheme name">
+            </mat-form-field>
+            <h5>First Payment Data</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="firstPaymentDateTime" class="form-control"
+                formControlName="firstPaymentDateTime" [formGroup]="paymentForm" placeholder="First Payment Date Time">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="firstPaymentAmount" class="form-control"
+                formControlName="firstPaymentAmount" [formGroup]="paymentForm" placeholder="First Payment Amount">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="firstPaymentCurrency" class="form-control"
+                formControlName="firstPaymentCurrency" [formGroup]="paymentForm" placeholder="First Payment Currency">
+            </mat-form-field>
+            <h5>Recurring Payment Data</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="recurringPaymentFirstPaymentAmount" class="form-control"
+                formControlName="recurringPaymentFirstPaymentAmount" [formGroup]="paymentForm"
+                placeholder="Recurring Payment First Payment Amount">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="recurringPaymentFirstPaymentCurrency" class="form-control"
+                formControlName="recurringPaymentFirstPaymentCurrency" [formGroup]="paymentForm"
+                placeholder="Recurring Payment First Payment Currency">
+            </mat-form-field>
+            <h5>Final Payment</h5>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="finalPaymentDateTime" class="form-control"
+                formControlName="finalPaymentDateTime" [formGroup]="paymentForm" placeholder="Final Payment Date Time">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="finalPaymentAmount" class="form-control"
+                formControlName="finalPaymentAmount" [formGroup]="paymentForm" placeholder="Final Payment Amount">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" id="finalPaymentCurrency" class="form-control"
+                formControlName="finalPaymentCurrency" [formGroup]="paymentForm" placeholder="Final Payment Currency">
+            </mat-form-field>
+            <div *ngIf="deptorChecked">
+              <h5>Debtor account</h5>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
+                  formControlName="debtorAccountSchemeName" [formGroup]="paymentForm"
+                  placeholder="Debtor account scheme name">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
+                  formControlName="debtorAccountIdentification" [formGroup]="paymentForm"
+                  placeholder="Debtor account identification">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="debtorAccountName" class="form-control"
+                  formControlName="debtorAccountName" [formGroup]="paymentForm" placeholder="Debtor account name">
+              </mat-form-field>
+            </div>
+            <div class="create-payment">
+              <button [disabled]="createdConsentId.value.length == 0" type="submit"
+                mat-raised-button>{{'create' | uppercase}}</button>
+              <div *ngIf="domesticPaymentPaymentId" class="created-successfully">Successful payment creation</div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion>
+        <mat-expansion-panel class="nested-accordion get">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Get Domestic Standing Order
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="get-payment-header">
+            <p class="get-payment-title">Domestic Standing Order by payment ID</p>
+          </div>
+          <mat-form-field class="example-full-width">
+            <input class="add-consent-id" matInput placeholder="Payment ID" value="{{domesticPaymentPaymentId}}"
+              #paymentId>
+          </mat-form-field>
+          <button name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
+            class="header-button-right" [disabled]="paymentId.value.length == 0" (click)="getPayment(paymentId.value)">{{'Get
+                            data' | uppercase}}</button>
+          <mat-card-content>
+            <div *ngIf="domesticPaymentDataSource">
+              <mat-table id="account-by-id-table" #table [dataSource]="domesticPaymentDataSource">
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef>Status </mat-header-cell>
+                  <mat-cell id="account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="firstPaymentDateTime">
+                  <mat-header-cell *matHeaderCellDef> FirstPaymentDateTime </mat-header-cell>
+                  <mat-cell id="payment-firstPaymentDateTime" *matCellDef="let element">
+                    {{element.Initiation.FirstPaymentDateTime | date: 'yyyy-MM-dd'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="finalPaymentDateTime">
+                  <mat-header-cell *matHeaderCellDef> FinalPaymentDateTime </mat-header-cell>
+                  <mat-cell id="payment-finalPaymentDateTime" *matCellDef="let element">
+                    {{element.Initiation.FinalPaymentDateTime | date: 'yyyy-MM-dd'}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="arrow">
+                  <mat-header-cell *matHeaderCellDef> Open data details </mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="arrow-center">
+                    <button mat-icon-button (click)="openDataDetails(element)">
+                      <i class="material-icons right">
+                        arrow_forward_ios
+                      </i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="domesticPaymentDisplayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: domesticPaymentDisplayedColumns;"></mat-row>
+              </mat-table>
+              <div *ngIf="isEmptyPayment" class="empty-result-text">No results.</div>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+          </mat-card-content>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card>

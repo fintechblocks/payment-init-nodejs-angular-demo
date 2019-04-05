@@ -1,11 +1,11 @@
-# How to use payment-init demo app with MKB sandbox
+# How to use payment-init demo app with exampleBank sandbox
 
 ## Set environment variables
 
 * Open *.env*
-* Set the following environment vairables properly based on MKB sandbox properties
-  * OIDC_WELL_KNOWN_URL (e.g. https://oidc-1.0.sandbox.mkb.hu/auth/realms/ftb-sandbox/.well-known/openid-configuration)
-  * PAYMENT_INIT_API_URL (e.g. https://api.sandbox.mkb.hu/payment-init-1.0)
+* Set the following environment vairables properly based on exampleBank sandbox properties
+  * OIDC_WELL_KNOWN_URL (e.g. https://api.sandbox.exampleBank.hu/auth/realms/ftb-sandbox/.well-known/openid-configuration)
+  * PAYMENT_INIT_API_URL (e.g. https://api.sandbox.exampleBank.hu/payment-init-1.0)
 * Custom properties
   * FRONTEND_HOST (e.g. payment-init-frontend.ftb-local, have to set in *hosts* file)
   * BACKEND_HOST (e.g. payment-init-back-end.ftb-local, have to set in *hosts* file)
@@ -47,7 +47,7 @@ Open *hosts* file and add FRONTEND_HOST and BACKEND_HOST.
 
 ## OIDC error: *Invalid parameter: redirect_uri*
 
-* Open keycloak (e.g. https://oidc-1.0.sandbox.mkb.hu/auth)
+* Open keycloak (e.g. https://api.sandbox.exampleBank.hu/auth)
 * Log in admin console
 * Click on *Clients*
 * Edit actual client (e.g. ftb-demo-app)

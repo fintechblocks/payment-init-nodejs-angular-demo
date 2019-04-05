@@ -34,7 +34,8 @@ services:
       - WELL_KNOWN_URL=${OIDC_WELL_KNOWN_URL}
       - MONGO_CONNECTION=mongodb://mongodb:27017/demo
       - CLIENT_SECRET=${CLIENT_SECRET}
-      - API_URL=${PAYMENT_INIT_API_URL}
+      - API_URL=${API_URL}
+      - PAYMENT_INIT_API_URL=${PAYMENT_INIT_API_URL}
       - NODE_TLS_REJECT_UNAUTHORIZED=0
       - CLIENT_ID=${CLIENT_ID}
       - PORT=8080
@@ -46,3 +47,5 @@ services:
 
   mongodb:
     image: mongo
+    ports:
+      - 27017:27017

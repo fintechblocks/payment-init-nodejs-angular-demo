@@ -1,0 +1,19 @@
+{
+  "Initiation": {
+    "InstructionIdentification": "ACME412",
+    "EndToEndIdentification": "FRESCO.21302.GFX.20",
+    "InstructedAmount": {
+      "Amount": "165.88",
+      "Currency": "GBP"
+    },
+    "CreditorAccount": {
+      "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+      "Identification": "08080021325698",
+      "Name": "ACME Inc"
+    },
+    "RemittanceInformation": {
+      "Reference": "FRESCO-101",
+      "Unstructured": "Internal ops code 5120101"
+    }
+  }
+}
