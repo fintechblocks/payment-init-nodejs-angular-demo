@@ -1,5 +1,4 @@
 import { HelpersService } from './_services/helpers.service';
-import { LocalStorageService } from './_services/local.storage.service';
 import { InternationalScheduledPaymentsComponent } from './controllers/international-scheduled-payment/international.scheduled.payments';
 import { BatchInternationalPaymentsComponent } from './controllers/batch-international-payments/batch.international.payments';
 import { InternationalPaymentsComponent } from './controllers/international-payments/international.payments';
@@ -22,8 +21,7 @@ import { ErrorInterceptor } from './_helpers';
 import { ExampleService } from './_helpers/example/example.service';
 import { AlertService } from './_services';
 import { ShowJsonDataDialog } from './controllers/dialogs/show.json.data.dialog';
-import { StorageServiceModule } from 'angular-webstorage-service';
-
+import { CookieService } from 'ngx-cookie-service';
 
 
 @NgModule({
@@ -54,15 +52,14 @@ import { StorageServiceModule } from 'angular-webstorage-service';
     ReactiveFormsModule,
     MatTableModule, 
     MatExpansionModule,
-    StorageServiceModule,
     RouterModule.forRoot([]),
   ],
   providers: [
     AlertService,
     AuthorizationService,
-    ExampleService,   
-    LocalStorageService,
+    ExampleService,
     HelpersService, 
+    CookieService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   entryComponents: [

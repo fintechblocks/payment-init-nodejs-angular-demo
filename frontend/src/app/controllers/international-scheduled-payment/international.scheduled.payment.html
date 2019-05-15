@@ -15,7 +15,7 @@
           </mat-expansion-panel-header>
           <div class="payment-header">
             <div class="payment-header-right">
-              <mat-checkbox [(ngModel)]="deptorChecked">With debtor data</mat-checkbox>
+              <mat-checkbox [(ngModel)]="consentDeptorChecked">With debtor data</mat-checkbox>
             </div>
           </div>
           <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createScheduledPaymentConsent()">
@@ -81,7 +81,7 @@
               <input matInput type="text" id="consent-unitCurrency" class="form-control" formControlName="unitCurrency"
                 [formGroup]="paymentForm" placeholder="Unit Currency">
             </mat-form-field>
-            <div *ngIf="deptorChecked">
+            <div *ngIf="consentDeptorChecked">
               <h5>Debtor account</h5>
               <mat-form-field class="example-full-width">
                 <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
@@ -222,7 +222,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          International Payment
+          International Scheduled Payment
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div *ngIf="internationalScheduledPaymentId">
@@ -233,7 +233,7 @@
         <mat-expansion-panel class="nested-accordion create">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Create International Payment
+              Create International Scheduled Payment
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="payment-header">
@@ -334,14 +334,14 @@
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="internationalScheduledPaymentId ? true :false">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Get International Payment
+              Get International Scheduled Payment
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="get-payment-header">
-            <p class="get-payment-title">International Payment by payment ID</p>
+            <p class="get-payment-title">International Scheduled Payment by payment ID</p>
           </div>
           <mat-form-field class="example-full-width">
             <input class="add-consent-id" matInput placeholder="Payment ID" value="{{internationalScheduledPaymentId}}"

@@ -7,7 +7,8 @@ import { AuthorizationService } from '../../http/api/authorization.service';
 import { ShowJsonDataDialog } from '../dialogs/show.json.data.dialog';
 import { BatchDomesticPaymentsService } from './../../http/api/batchDomesticPayments.service';
 import { PaymentConsentType } from './../../http/model/paymentType';
-import { AlertService, HelpersService, LocalStorageService  } from '../../_services';
+import { AlertService, HelpersService  } from '../../_services';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'batch-domestic-payments-component',
@@ -40,7 +41,7 @@ export class BatchDomesticPaymentsComponent implements OnInit {
     private alertService: AlertService,
     private _batchDomesticPaymentsService: BatchDomesticPaymentsService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) { }
 
@@ -80,7 +81,7 @@ export class BatchDomesticPaymentsComponent implements OnInit {
     const createPaymentConsentBodyJson: OBWriteBatchDomesticConsent2 = this.createPaymentBody(paymentFormValue);
     this._batchDomesticPaymentsService.createBatchDomesticPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['BATCH_DOMESTIC_PAYMENT_CONSENT']);
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.BATCH_DOMESTIC_PAYMENT_CONSENT);
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
         error => {
@@ -194,7 +195,7 @@ export class BatchDomesticPaymentsComponent implements OnInit {
       body.Data.DomesticScheduledPayments[0].Permission = "Create";
     }
 
-    if (this.consentDeptorChecked) {
+    if (this.consentDeptorChecked || this.deptorChecked) {
       body.Data.DomesticScheduledPayments[0].Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.scheduledDebtorAccountSchemeName,
         Identification: paymentFormValue.scheduledDebtorAccountIdentification,

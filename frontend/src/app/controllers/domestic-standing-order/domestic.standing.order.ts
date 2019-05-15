@@ -1,10 +1,11 @@
+import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { OBWriteDomesticStandingOrder2, OBWriteDomesticStandingOrderConsent2 } from '../../http';
 import { AuthorizationService } from '../../http/api/authorization.service';
-import { AlertService, HelpersService, LocalStorageService  } from '../../_services';
+import { AlertService, HelpersService } from '../../_services';
 import { DomesticStandingOrdersService } from './../../http/api/domesticStandingOrders.service';
 import { PaymentConsentType } from './../../http/model/paymentType';
 import { ShowJsonDataDialog } from './../dialogs/show.json.data.dialog';
@@ -41,7 +42,7 @@ export class DomesticStandingOrderComponent implements OnInit {
     private alertService: AlertService,
     private _domesticStandingOrdersService: DomesticStandingOrdersService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) { }
 
@@ -72,7 +73,7 @@ export class DomesticStandingOrderComponent implements OnInit {
     const createPaymentConsentBodyJson: OBWriteDomesticStandingOrderConsent2 = this.createPaymentBody(paymentFormValue);
     this._domesticStandingOrdersService.createDomesticStandingOrderConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['DOMESTIC_STANDING_ORDER_CONSENT']);
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.DOMESTIC_STANDING_ORDER_CONSENT);
 
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
@@ -168,7 +169,7 @@ export class DomesticStandingOrderComponent implements OnInit {
       body.Data.ConsentId = consentId;
     }
 
-    if (this.consentDeptorChecked) {
+    if (this.consentDeptorChecked || this.deptorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

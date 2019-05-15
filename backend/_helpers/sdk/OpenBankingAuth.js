@@ -15,7 +15,7 @@ module.exports.OpenBankingAuth = class OpenBankingAuth {
   }
 
   async getAccessToken() {
-    var client = await utils.createClient(this.clientId, this.privateKey, this.tokenEndpointUri, this.authEndpointUri, this.issuer, this.jwksUri);
+    var client = await utils.createClient(this.clientId, this.privateKey, this.tokenEndpointUri, this.authEndpointUri, this.issuer, this.jwksUri, this.keyID);
     this.client = client;
     const accessTokenWithClientCredentials = await client.grant({
       grant_type: 'client_credentials',

@@ -282,7 +282,7 @@
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="domesticPaymentPaymentId ? true :false">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Get Domestic Standing Order

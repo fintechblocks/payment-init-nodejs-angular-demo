@@ -1,3 +1,4 @@
+import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
@@ -5,7 +6,7 @@ import * as _ from 'lodash';
 import { OBWriteBatchInternationalConsent2 } from '../../http';
 import { AuthorizationService } from '../../http/api/authorization.service';
 import { BatchInternationalPaymentsService } from '../../http/api/batchInternationalPayments.service';
-import { AlertService, HelpersService, LocalStorageService  } from '../../_services';
+import { AlertService, HelpersService  } from '../../_services';
 import { ShowJsonDataDialog } from '../dialogs/show.json.data.dialog';
 import { PaymentConsentType } from './../../http/model/paymentType';
 
@@ -41,7 +42,7 @@ export class BatchInternationalPaymentsComponent implements OnInit {
     private alertService: AlertService,
     private _batchInternationalPaymentsService: BatchInternationalPaymentsService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) { }
 
@@ -87,7 +88,7 @@ export class BatchInternationalPaymentsComponent implements OnInit {
     const createPaymentConsentBodyJson: OBWriteBatchInternationalConsent2 = this.createPaymentBody(paymentFormValue);
     this._batchInternationalPaymentsService.createBatchInternationalPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['BATCH_INTERNATIONAL_PAYMENT_CONSENT']);
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.BATCH_INTERNATIONAL_PAYMENT_CONSENT);
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
         error => {
@@ -215,7 +216,7 @@ export class BatchInternationalPaymentsComponent implements OnInit {
       body.Data.InternationalScheduledPayments[0].Permission = "Create";
     }
 
-    if (this.consentDeptorChecked) {
+    if (this.consentDeptorChecked || this.deptorChecked) {
       body.Data.InternationalPayments[0].Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

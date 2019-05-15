@@ -12,32 +12,32 @@
   </mat-card>
 </section>
 <div>
-  <section class="section-class title" *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.DOMESTIC_PAYMENT_CONSENT)'>
+  <section class="section-class title" *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.DOMESTIC_PAYMENT_CONSENT)'>
     <h4>Domestic Payments</h4>
     <domestic-payments-component [consent_id]="consentId"></domestic-payments-component>
   </section>
   <section class="section-class title"
-    *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.DOMESTIC_SCHEDULED_PAYMENT_CONSENT)'>
+    *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.DOMESTIC_SCHEDULED_PAYMENT_CONSENT)'>
     <h4>Domestic Scheduled Payments</h4>
     <domestic-Scheduled-payments-component [consent_id]="consentId"></domestic-Scheduled-payments-component>
   </section>
-  <section class="section-class title" *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.DOMESTIC_STANDING_ORDER_CONSENT)'>
+  <section class="section-class title" *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.DOMESTIC_STANDING_ORDER_CONSENT)'>
     <h4>Domestic Standing Order</h4>
     <domestic-standing-order-component [consent_id]="consentId"></domestic-standing-order-component>
   </section>
-  <section class="section-class title" *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.BATCH_DOMESTIC_PAYMENT_CONSENT)'>
+  <section class="section-class title" *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.BATCH_DOMESTIC_PAYMENT_CONSENT)'>
     <h4>Batch Domestic Payments</h4>
     <batch-domestic-payments-component [consent_id]="consentId"></batch-domestic-payments-component>
   </section>
-  <section class="section-class title" *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.INTERNATIONAL_PAYMENT_CONSENT)'>
+  <section class="section-class title" *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.INTERNATIONAL_PAYMENT_CONSENT)'>
     <h4>International Payments</h4>
     <international-payments-component [consent_id]="consentId"></international-payments-component>
   </section>
-  <section class="section-class title" *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.BATCH_INTERNATIONAL_PAYMENT_CONSENT)'>
+  <section class="section-class title" *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.BATCH_INTERNATIONAL_PAYMENT_CONSENT)'>
     <h4>Batch International Payments</h4>
     <batch-international-payments-component [consent_id]="consentId"></batch-international-payments-component>
   </section>
-  <section class="section-class title" *ngIf='!savedLocalStorage || (savedLocalStorage && savedLocalStorage == paymentConsentTypes.INTERNATIONAL_SCHEDULED_PAYMENT_CONSENT)'>
+  <section class="section-class title" *ngIf='!savedPaymentType || (savedPaymentType && savedPaymentType == paymentConsentTypes.INTERNATIONAL_SCHEDULED_PAYMENT_CONSENT)'>
     <h4>International Scheduled Payments</h4>
     <international-Scheduled-payments-component [consent_id]="consentId"></international-Scheduled-payments-component>
   </section>

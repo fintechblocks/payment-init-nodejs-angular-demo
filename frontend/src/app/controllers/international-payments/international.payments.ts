@@ -1,3 +1,4 @@
+import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
@@ -5,7 +6,7 @@ import * as _ from 'lodash';
 import { OBWriteInternationalConsent2 } from '../../http';
 import { AuthorizationService } from '../../http/api/authorization.service';
 import { InternationalPaymentsService } from '../../http/api/internationalPayments.service';
-import { AlertService, HelpersService, LocalStorageService  } from '../../_services';
+import { AlertService, HelpersService } from '../../_services';
 import { ShowJsonDataDialog } from '../dialogs/show.json.data.dialog';
 import { PaymentConsentType } from './../../http/model/paymentType';
 
@@ -46,7 +47,7 @@ export class InternationalPaymentsComponent implements OnInit {
     private alertService: AlertService,
     private _internationalPaymentsService: InternationalPaymentsService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) { }
 
@@ -77,7 +78,7 @@ export class InternationalPaymentsComponent implements OnInit {
     const createPaymentConsentBodyJson: OBWriteInternationalConsent2 = this.createPaymentBody(paymentFormValue);
     this._internationalPaymentsService.createInternationalPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['INTERNATIONAL_PAYMENT_CONSENT']);
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.INTERNATIONAL_PAYMENT_CONSENT);
 
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
@@ -128,6 +129,7 @@ export class InternationalPaymentsComponent implements OnInit {
     let idempotencyKey = this._helpersService.generateIdempotencyKey();
     const paymentFormValue = this.paymentForm.value;
 
+    console.log("paymentFormValue", paymentFormValue);
     const createPaymentBodyJson = this.createPaymentBody(paymentFormValue, consentId.trim());
     this._internationalPaymentsService.createInternationalPayments(createPaymentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
@@ -186,7 +188,7 @@ export class InternationalPaymentsComponent implements OnInit {
       body.Data.ConsentId = consentId;
     }
 
-    if (this.consentDeptorChecked) {
+    if (this.consentDeptorChecked || this.deptorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

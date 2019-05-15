@@ -1,3 +1,4 @@
+import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
@@ -8,7 +9,6 @@ import { AuthorizationService } from '../../http/api/authorization.service';
 import { AlertService } from '../../_services';
 import { ShowJsonDataDialog } from '../dialogs/show.json.data.dialog';
 import { PaymentConsentType } from './../../http/model/paymentType';
-import { LocalStorageService } from '../../_services';
 
 @Component({
   selector: 'international-Scheduled-payments-component',
@@ -24,6 +24,7 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
   payment: any;
   emptyAuthorization: string = "";
   deptorChecked: boolean = false;
+  consentDeptorChecked: boolean = false;
   internationalScheduledPaymentId;
   internationalPaymentConsentDataSource;
   internationalPaymentConsentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
@@ -46,7 +47,7 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
     private alertService: AlertService,
     private _internationalScheduledPaymentsService: InternationalScheduledPaymentsService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) { }
 
@@ -77,8 +78,7 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
     const createPaymentConsentBodyJson = this.createPaymentBody(paymentFormValue);
     this._internationalScheduledPaymentsService.createInternationalScheduledPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['INTERNATIONAL_SCHEDULED_PAYMENT_CONSENT']);
-
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.INTERNATIONAL_SCHEDULED_PAYMENT_CONSENT);
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
         error => {
@@ -190,7 +190,7 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
       body.Data.Permission = "Create";
     }
 
-    if (this.deptorChecked) {
+    if (this.deptorChecked || this.consentDeptorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

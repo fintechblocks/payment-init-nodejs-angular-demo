@@ -15,7 +15,7 @@
           </mat-expansion-panel-header>
           <div class="payment-header">
             <div class="payment-header-right">
-              <mat-checkbox [(ngModel)]="deptorChecked">With debtor data</mat-checkbox>
+              <mat-checkbox [(ngModel)]="consentDeptorChecked">With debtor data</mat-checkbox>
             </div>
           </div>
           <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createScheduledPaymentConsent()">
@@ -69,7 +69,7 @@
                 formControlName="endToEndIdentification" [formGroup]="paymentForm"
                 placeholder="End to end identification">
             </mat-form-field>
-            <div *ngIf="deptorChecked">
+            <div *ngIf="consentDeptorChecked">
               <h5>Debtor account</h5>
               <mat-form-field class="example-full-width">
                 <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
@@ -156,7 +156,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Domestic Payment
+          Domestic Scheduled Payment
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div *ngIf="domesticScheduledPaymentId">
@@ -167,7 +167,7 @@
         <mat-expansion-panel class="nested-accordion create">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Create Domestic Payment
+              Create Domestic Scheduled Payment
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="payment-header">
@@ -256,14 +256,14 @@
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="domesticScheduledPaymentId ? true :false">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Get Domestic Payment
+              Get Domestic Scheduled Payment
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="get-payment-header">
-            <p class="get-payment-title">Domestic Payment by payment ID</p>
+            <p class="get-payment-title">Domestic Scheduled Payment by payment ID</p>
           </div>
           <mat-form-field class="example-full-width">
             <input class="add-consent-id" matInput placeholder="Payment ID" value="{{domesticScheduledPaymentId}}"

@@ -1,3 +1,4 @@
+import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
@@ -5,7 +6,7 @@ import * as _ from 'lodash';
 import { OBWriteDomesticConsent2 } from '../../http';
 import { AuthorizationService } from '../../http/api/authorization.service';
 import { DomesticPaymentsService } from '../../http/api/domesticPayments.service';
-import { AlertService, HelpersService, LocalStorageService  } from '../../_services';
+import { AlertService, HelpersService } from '../../_services';
 import { PaymentConsentType } from './../../http/model/paymentType';
 import { ShowJsonDataDialog } from './../dialogs/show.json.data.dialog';
 @Component({
@@ -44,7 +45,7 @@ export class DomesticPaymentsComponent implements OnInit {
     private alertService: AlertService,
     private _domesticPaymentsService: DomesticPaymentsService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) { }
 
@@ -71,7 +72,7 @@ export class DomesticPaymentsComponent implements OnInit {
     const createPaymentConsentBodyJson: OBWriteDomesticConsent2 = this.createPaymentBody(paymentFormValue);
     this._domesticPaymentsService.createDomesticPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['DOMESTIC_PAYMENT_CONSENT']);
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.DOMESTIC_PAYMENT_CONSENT);
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
         error => {
@@ -172,14 +173,16 @@ export class DomesticPaymentsComponent implements OnInit {
     if (consentId) {
       body.Data.ConsentId = consentId;
     }
-
-    if (this.consentDeptorChecked) {
+    
+    if (this.consentDeptorChecked || this.deptorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,
         Name: paymentFormValue.debtorAccountName
       }
     }
+
+
 
     let cleanedRequestBody = this._helpersService.cleanObjectsFromEmptyElements(body);
     cleanedRequestBody.Risk = {};

@@ -1,10 +1,11 @@
+import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { DomesticScheduledPaymentsService } from '../../http';
 import { AuthorizationService } from '../../http/api/authorization.service';
-import { AlertService, HelpersService, LocalStorageService  } from '../../_services';
+import { AlertService, HelpersService } from '../../_services';
 import { ShowJsonDataDialog } from '../dialogs/show.json.data.dialog';
 import { PaymentConsentType } from './../../http/model/paymentType';
 @Component({
@@ -21,6 +22,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
   payment: any;
   emptyAuthorization: string = "";
   deptorChecked: boolean = false;
+  consentDeptorChecked: boolean = false;
   domesticScheduledPaymentId;
 
   domesticPaymentConsentDataSource;
@@ -44,7 +46,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
     private alertService: AlertService,
     private _domesticScheduledPaymentsService: DomesticScheduledPaymentsService,
     public dialog: MatDialog,
-    private _localStorageService: LocalStorageService,
+    private _cookieService: CookieService,
     private _helpersService: HelpersService
   ) {}
 
@@ -72,7 +74,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
     const createPaymentConsentBodyJson = this.createPaymentBody(paymentFormValue);
     this._domesticScheduledPaymentsService.createDomesticScheduledPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this._localStorageService.saveInLocal('PAYMENT_TYPE', PaymentConsentType['DOMESTIC_SCHEDULED_PAYMENT_CONSENT']);
+        this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.DOMESTIC_SCHEDULED_PAYMENT_CONSENT);
         this.redirectAuthorizationUrl(result.Data.ConsentId)
       },
         error => {
@@ -164,7 +166,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
       body.Data.Permission = "Create";
     }
 
-    if (this.deptorChecked) {
+    if (this.consentDeptorChecked || this.deptorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,
