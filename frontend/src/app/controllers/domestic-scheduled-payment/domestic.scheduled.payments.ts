@@ -21,13 +21,13 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
   paymentForm: FormGroup;
   payment: any;
   emptyAuthorization: string = "";
-  deptorChecked: boolean = false;
-  consentDeptorChecked: boolean = false;
+  debtorChecked: boolean = false;
+  consentDebtorChecked: boolean = false;
   domesticScheduledPaymentId;
 
   domesticPaymentConsentDataSource;
   domesticPaymentConsentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentConsentPaginator: MatPaginator;
+  @ViewChild('domesticScheduledPaymentConsentPaginator') domesticPaymentConsentPaginator: MatPaginator;
   isEmptyPaymentConsent;
 
   domesticPaymentConsentFundsConfirmationDataSource;
@@ -37,7 +37,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
 
   domesticPaymentDataSource;
   domesticPaymentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentPaginator: MatPaginator;
+  @ViewChild('domesticScheduledPaymentPaginator') domesticPaymentPaginator: MatPaginator;
   isEmptyPayment;
 
   constructor(
@@ -53,18 +53,19 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
   ngOnInit() {
     this.paymentForm = this.formBuilder.group({
       instructedAmountCurrency: ['HUF'],
-      instructedAmount: ['1680.00'],
+      instructedAmount: ['100000.00'],
       instructionIdentification: ['mobilVallet123'],
       endToEndIdentification: ['29152852756654'],
-      requestedExecutionDateTime: ['2018-08-06T00:00:00+00:00'],
+      requestedExecutionDateTime: ['2020-08-06T00:00:00+00:00'],
       creditorAccountSchemeName: ['IBAN'],
       creditorAccountIdentification: ['HU35120103740010183300200004'],
       creditorAccountName: ['Deichmann Cipőkereskedelmi Korlátolt Felelősségű Társaság'],
-      debtorAccountSchemeName: ["IBAN"],
-      debtorAccountIdentification: ["HU23103000029321814060584399"],
+      debtorAccountSchemeName: ["BBAN"],
+      debtorAccountIdentification: ["141002132044784901000009"],
       debtorAccountName: ["Kiss Pista"],
       remittanceInformationReference: ["FRESCO-101"],
-      remittanceInformationUnstructured: ["Internal ops code 5120101"]
+      remittanceInformationUnstructured: ["Internal ops code 5120101"],
+      localInstrument: [""]      
     });
   }
 
@@ -141,6 +142,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
           InstructionIdentification: paymentFormValue.instructionIdentification,
           EndToEndIdentification: paymentFormValue.endToEndIdentification,
           RequestedExecutionDateTime: paymentFormValue.requestedExecutionDateTime,
+          LocalInstrument: paymentFormValue.localInstrument,
           InstructedAmount: {
             Amount: paymentFormValue.instructedAmount,
             Currency: paymentFormValue.instructedAmountCurrency
@@ -166,7 +168,7 @@ export class DomesticScheduledPaymentsComponent implements OnInit {
       body.Data.Permission = "Create";
     }
 
-    if (this.consentDeptorChecked || this.deptorChecked) {
+    if (this.consentDebtorChecked || this.debtorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

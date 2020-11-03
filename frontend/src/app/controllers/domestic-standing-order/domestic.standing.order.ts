@@ -22,18 +22,18 @@ export class DomesticStandingOrderComponent implements OnInit {
   keys = Object.keys;
   paymentForm: FormGroup;
   emptyAuthorization: string = "";
-  consentDeptorChecked: boolean = false;
-  deptorChecked: boolean = false;
+  consentDebtorChecked: boolean = false;
+  debtorChecked: boolean = false;
   domesticPaymentPaymentId;
 
   domesticPaymentConsentDataSource;
   domesticPaymentConsentDisplayedColumns: string[] = ['status', 'firstPaymentDateTime', 'finalPaymentDateTime', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentConsentPaginator: MatPaginator;
+  @ViewChild('domesticStandingOrderConsentPaginator') domesticPaymentConsentPaginator: MatPaginator;
   isEmptyPaymentConsent;
 
   domesticPaymentDataSource;
   domesticPaymentDisplayedColumns: string[] = ['status', 'firstPaymentDateTime', 'finalPaymentDateTime', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentPaginator: MatPaginator;
+  @ViewChild('domesticStandingOrderPaginator') domesticPaymentPaginator: MatPaginator;
   isEmptyPayment;
 
   constructor(
@@ -51,18 +51,18 @@ export class DomesticStandingOrderComponent implements OnInit {
       initiationFrequency: ['EvryDay'],
       initiationReference: ['Pocket money for Damien'],
       firstPaymentDateTime: ['1976-06-06T06:06:06+00:00'],
-      firstPaymentAmount: ['6.66'],
+      firstPaymentAmount: ['100000.00'],
       firstPaymentCurrency: ['HUF'],
       creditorAccountSchemeName: ['IBAN'],
       creditorAccountIdentification: ['HU23103000029321814060584399'],
       creditorAccountName: ['Bob Clements'],
-      recurringPaymentFirstPaymentAmount: ['7.00'],
+      recurringPaymentFirstPaymentAmount: ['100010.00'],
       recurringPaymentFirstPaymentCurrency: ['HUF'],
       finalPaymentDateTime: ['2020-03-20T06:06:06+00:00'],
-      finalPaymentAmount: ['7.00'],
+      finalPaymentAmount: ['100010.00'],
       finalPaymentCurrency: ['HUF'],
-      debtorAccountSchemeName: ["IBAN"],
-      debtorAccountIdentification: ["HU23103000029321814060584399"],
+      debtorAccountSchemeName: ["BBAN"],
+      debtorAccountIdentification: ["141002132044784901000009"],
       debtorAccountName: ["Kiss Pista"]
     });
   }
@@ -166,10 +166,11 @@ export class DomesticStandingOrderComponent implements OnInit {
     }
 
     if (consentId) {
+      body.Data.Permission = undefined;
       body.Data.ConsentId = consentId;
     }
 
-    if (this.consentDeptorChecked || this.deptorChecked) {
+    if (this.consentDebtorChecked || this.debtorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

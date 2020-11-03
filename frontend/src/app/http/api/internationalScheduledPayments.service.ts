@@ -63,7 +63,7 @@ export class InternationalScheduledPaymentsService {
 
 
     /**
-     * Create International Scheduled Payment Consents
+     * Add International Scheduled Payments
      * 
      * @param OBWriteInternationalScheduledConsent2Param Default
      * @param Authorization An Authorisation Token as per https://tools.ietf.org/html/rfc6750

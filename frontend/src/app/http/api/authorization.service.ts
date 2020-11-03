@@ -39,7 +39,6 @@ export class AuthorizationService {
   }
 
   public postAuthorizationCallback(body: any): Observable<any> {
-    console.log('postAuthorizationCallback body: ', body);
     if (body === null || body === undefined) {
       throw new Error('Required parameter body was null or undefined when calling postAuthorizationCallback.');
     }
@@ -74,11 +73,6 @@ export class AuthorizationService {
 
     let observe: any = 'body';
     let reportProgress: boolean = false;
-    console.log('call backend');
-    console.log(this.configuration.withCredentials);
-    console.log(headers)
-    console.log(observe)
-    console.log(reportProgress)
     return this.httpClient.post<any>(`${this.basePath}/authorization-callback`,
       body,
       {

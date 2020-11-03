@@ -1,6 +1,6 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { OBWriteInternationalConsent2 } from '../../http';
@@ -22,23 +22,23 @@ export class InternationalPaymentsComponent implements OnInit {
   keys = Object.keys;
   paymentForm: FormGroup;
   emptyAuthorization: string = "";
-  consentDeptorChecked: boolean = false;
-  deptorChecked: boolean = false;
+  consentDebtorChecked: boolean = false;
+  debtorChecked: boolean = false;
   internationalPaymentPaymentId;
   internationalPaymentConsentDataSource;
 
   internationalPaymentConsentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) internationalPaymentConsentPaginator: MatPaginator;
+  @ViewChild('internationalPaymentConsentPaginator') internationalPaymentConsentPaginator: MatPaginator;
   isEmptyPaymentConsent;
 
   internationalPaymentConsentFundsConfirmationDataSource;
   internationalPaymentConsentFundsConfirmationDisplayedColumns: string[] = ['fundsAvailableDateTime', 'fundsAvailable', 'arrow'];
-  @ViewChild(MatPaginator) internationalPaymentConsentFundsConfirmationPaginator: MatPaginator;
+  @ViewChild('internationalPaymentConsentFundsConfirmationPaginator') internationalPaymentConsentFundsConfirmationPaginator: MatPaginator;
   isEmptyFundsConfirmation;
 
   internationalPaymentDataSource;
   internationalPaymentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) internationalPaymentPaginator: MatPaginator;
+  @ViewChild('internationalPaymentPaginator') internationalPaymentPaginator: MatPaginator;
   isEmptyPayment;
 
   constructor(
@@ -54,21 +54,39 @@ export class InternationalPaymentsComponent implements OnInit {
   ngOnInit() {
     this.paymentForm = this.formBuilder.group({
       instructedAmountCurrency: ['HUF'],
-      instructedAmount: ['1680.00'],
+      instructedAmount: ['100000.00'],
       instructionIdentification: ['mobilVallet123'],
       endToEndIdentification: ['29152852756654'],
       creditorAccountSchemeName: ['IBAN'],
       creditorAccountIdentification: ['HU35120103740010183300200004'],
       creditorAccountName: ['Deichmann Cipőkereskedelmi Korlátolt Felelősségű Társaság'],
-      debtorAccountSchemeName: ["IBAN"],
-      debtorAccountIdentification: ["HU23103000029321814060584399"],
+      debtorAccountSchemeName: ["BBAN"],
+      debtorAccountIdentification: ["141002132044784901000009"],
       debtorAccountName: ["Kiss Pista"],
       remittanceInformationReference: ["FRESCO-101"],
       remittanceInformationUnstructured: ["Internal ops code 5120101"],
       currencyOfTransfer: ["USD"],
       unitCurrency: ["GBP"],
-      rateType: ["Actual"]
+      rateType: ["Actual"],
+      localInstrument: [""],
+      chargeBearer: ["Shared"],
+      creditorName: ["CRENM"],
+      creditorPostalAddress: this.formBuilder.group({
+        creditorAddressLine: this.formBuilder.array(["Kis utca 13"])
+      }),
+      creditorAgentName: ["BANK_NAME"],
+      creditorAgentIdentification: ["BANKSWIFTCODE"]
     });
+  }
+
+  get creditorAddressLine(): FormArray {
+    return this.paymentForm.get("creditorPostalAddress").get("creditorAddressLine") as FormArray
+  }
+
+  addAddressLine():void {
+    if (this.creditorAddressLine.length < 7) {
+      this.creditorAddressLine.push(this.formBuilder.control(""));
+    }
   }
 
   createPaymentConsent() {
@@ -128,8 +146,6 @@ export class InternationalPaymentsComponent implements OnInit {
   createPayment(consentId) {
     let idempotencyKey = this._helpersService.generateIdempotencyKey();
     const paymentFormValue = this.paymentForm.value;
-
-    console.log("paymentFormValue", paymentFormValue);
     const createPaymentBodyJson = this.createPaymentBody(paymentFormValue, consentId.trim());
     this._internationalPaymentsService.createInternationalPayments(createPaymentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
@@ -158,8 +174,10 @@ export class InternationalPaymentsComponent implements OnInit {
       Data: {
         ConsentId: {},
         Initiation: {
+          ChargeBearer: paymentFormValue.chargeBearer,
           InstructionIdentification: paymentFormValue.instructionIdentification,
           EndToEndIdentification: paymentFormValue.endToEndIdentification,
+          LocalInstrument: paymentFormValue.localInstrument,
           InstructedAmount: {
             Amount: paymentFormValue.instructedAmount,
             Currency: paymentFormValue.instructedAmountCurrency
@@ -168,6 +186,16 @@ export class InternationalPaymentsComponent implements OnInit {
             SchemeName: paymentFormValue.creditorAccountSchemeName,
             Identification: paymentFormValue.creditorAccountIdentification,
             Name: paymentFormValue.creditorAccountName
+          },
+          CreditorAgent: {
+            Identification: paymentFormValue.creditorAgentIdentification,
+            Name: paymentFormValue.creditorAgentName
+          },
+          Creditor: {
+            Name: paymentFormValue.creditorName,
+            PostalAddress: {
+              AddressLine: paymentFormValue.creditorPostalAddress.creditorAddressLine
+            }
           },
           RemittanceInformation: {
             Reference: paymentFormValue.remittanceInformationReference,
@@ -188,7 +216,7 @@ export class InternationalPaymentsComponent implements OnInit {
       body.Data.ConsentId = consentId;
     }
 
-    if (this.consentDeptorChecked || this.deptorChecked) {
+    if (this.consentDebtorChecked || this.debtorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

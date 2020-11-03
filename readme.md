@@ -29,16 +29,24 @@ Open *hosts* file and add FRONTEND_HOST and BACKEND_HOST.
 127.0.0.1 payment-init-backend.ftb-local
 ```
 
-## Set backend url for frontend
+## Set backend url for frontend for LOCAL docker-compose.yml (without https)
 
-* Open *frontend-env.json*
+* Open *frontend-env-local.json*
 * base path of *apiUrl* is equal to BACKEND_HOST
 
 ### Example
 
 ```frontend environment
-"apiUrl": "http://payment-init-backend.ftb-local/payment-init-1.0"
+"apiUrl": "http://payment-init-backend.ftb-local"
 ```
+
+## Add keys:
+Add pulic and private key to backend/keys folder
+For example: 
+public_cert.pem and private.key 
+or
+public_key.txt and private_key.txt
+
 
 ## Run demo application
 

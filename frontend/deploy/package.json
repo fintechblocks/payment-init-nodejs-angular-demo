@@ -1,0 +1,11 @@
+{
+    "name": "simple-app-server",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+      "cors": "^2.8.4",
+      "express": "^4.15.3",
+      "forever": "^0.15.3"
+    }
+  }
+  

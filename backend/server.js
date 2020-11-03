@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // api routes
-app.use('/payment-init-1.0', require('./payment-init/payment-init.controller'));
+app.use('/', require('./payment-init/payment-init.controller'));
 
 // global error handler
 app.use(errorHandler);

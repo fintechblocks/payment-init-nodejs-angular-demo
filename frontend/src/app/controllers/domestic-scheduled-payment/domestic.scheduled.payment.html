@@ -1,13 +1,13 @@
 <mat-card>
   <mat-accordion>
-    <mat-expansion-panel [expanded]="consent_id ? true :false">
+    <mat-expansion-panel [expanded]="consent_id ? true :false" id="domestic-scheduled-payment-consent-accordion">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Domestic Scheduled Payment Consent
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion create">
+        <mat-expansion-panel class="nested-accordion create" id="create-domestic-scheduled-payment-consent-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Create Domestic Scheduled Payment Consent
@@ -15,83 +15,90 @@
           </mat-expansion-panel-header>
           <div class="payment-header">
             <div class="payment-header-right">
-              <mat-checkbox [(ngModel)]="consentDeptorChecked">With debtor data</mat-checkbox>
+              <mat-checkbox id="domestic-scheduled-payment-consent-with-debtor-data-checkbox" labelPosition="before" [(ngModel)]="consentDebtorChecked">With Debtor data</mat-checkbox>
             </div>
           </div>
           <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createScheduledPaymentConsent()">
             <h5>Instructed amount</h5>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="amount" class="form-control" formControlName="instructedAmount"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-amount" class="form-control" formControlName="instructedAmount"
                 [formGroup]="paymentForm" placeholder="Instructed amount">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="currency" class="form-control" formControlName="instructedAmountCurrency"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-currency" class="form-control" formControlName="instructedAmountCurrency"
                 [formGroup]="paymentForm" placeholder="Instructed amount currency">
             </mat-form-field>
             <h5>Creditor account</h5>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-creditorAccountIdentification" class="form-control"
                 formControlName="creditorAccountIdentification" [formGroup]="paymentForm"
                 placeholder="Creditor account identification">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="name" class="form-control" formControlName="creditorAccountName"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-name" class="form-control" formControlName="creditorAccountName"
                 [formGroup]="paymentForm" placeholder="Creditor account name">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-creditorAccountSchemeName" class="form-control"
                 formControlName="creditorAccountSchemeName" [formGroup]="paymentForm"
                 placeholder="Creditor account scheme name">
             </mat-form-field>
             <h5>Remittance information</h5>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationReference" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-remittanceInformationReference" class="form-control"
                 formControlName="remittanceInformationReference" [formGroup]="paymentForm"
                 placeholder="Remittance information reference">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationUnstructured" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-remittanceInformationUnstructured" class="form-control"
                 formControlName="remittanceInformationUnstructured" [formGroup]="paymentForm"
                 placeholder="Remittance information unstructured">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="instructionIdentification" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-instructionIdentification" class="form-control"
                 formControlName="instructionIdentification" [formGroup]="paymentForm"
                 placeholder="Instruction identification">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="requestedExecutionDateTime" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-requestedExecutionDateTime" class="form-control"
                 formControlName="requestedExecutionDateTime" [formGroup]="paymentForm"
                 placeholder="Requested Execution Date Time">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="endToEndIdentification" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-consent-endToEndIdentification" class="form-control"
                 formControlName="endToEndIdentification" [formGroup]="paymentForm"
                 placeholder="End to end identification">
             </mat-form-field>
-            <div *ngIf="consentDeptorChecked">
+            <div>
+              <h5>Local Instrument</h5>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="create-domestic-scheduled-payment-consent-localInstrument" class="form-control"
+                  formControlName="localInstrument" [formGroup]="paymentForm" placeholder="Local Instrument">
+              </mat-form-field>
+            </div>
+            <div *ngIf="consentDebtorChecked">
               <h5>Debtor account</h5>
               <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
+                <input matInput type="text" id="create-domestic-scheduled-payment-consent-debtorAccountSchemeName" class="form-control"
                   formControlName="debtorAccountSchemeName" [formGroup]="paymentForm"
                   placeholder="Debtor account scheme name">
               </mat-form-field>
               <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
+                <input matInput type="text" id="create-domestic-scheduled-payment-consent-debtorAccountIdentification" class="form-control"
                   formControlName="debtorAccountIdentification" [formGroup]="paymentForm"
                   placeholder="Debtor account identification">
               </mat-form-field>
               <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountName" class="form-control"
+                <input matInput type="text" id="create-domestic-scheduled-payment-consent-debtorAccountName" class="form-control"
                   formControlName="debtorAccountName" [formGroup]="paymentForm" placeholder="Debtor account name">
               </mat-form-field>
             </div>
-            <button type="submit" mat-raised-button>{{'create' | uppercase}}</button>
+            <button id="create-domestic-scheduled-payment-consent" type="submit" mat-raised-button>{{'create' | uppercase}}</button>
           </form>
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get" [expanded]="consent_id ? true :false">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="consent_id ? true :false" id="get-domestic-scheduled-payment-consent-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Get Domestic Scheduled Payment Consent
@@ -103,29 +110,29 @@
           <div>
             <h5>Consent ID</h5>
             <mat-form-field class="example-full-width">
-              <input class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #consentId>
+              <input id="domestic-scheduled-payment-consent-id" class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #consentId>
             </mat-form-field>
           </div>
-          <button name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
+          <button id="domestic-scheduled-payment-consent-get-data-button" name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
             class="header-button-right" [disabled]="consentId.value.length == 0"
             (click)="getScheduledPaymentConsent(consentId.value)">{{'Get
                           data' | uppercase}}</button>
           <mat-card-content>
             <div *ngIf="domesticPaymentConsentDataSource">
-              <mat-table id="account-by-id-table" #table [dataSource]="domesticPaymentConsentDataSource">
+              <mat-table id="get-domestic-scheduled-payment-consent-account-by-id-table" #table [dataSource]="domesticPaymentConsentDataSource">
                 <ng-container matColumnDef="status" class="status-cell">
                   <mat-header-cell *matHeaderCellDef>Status </mat-header-cell>
-                  <mat-cell id="account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
+                  <mat-cell id="get-domestic-scheduled-payment-consent-account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="identification">
                   <mat-header-cell *matHeaderCellDef class="identification-table-cell"> Identification </mat-header-cell>
-                  <mat-cell id="account-by-id-nickname" *matCellDef="let element" class="identification-table-cell">
+                  <mat-cell id="get-domestic-scheduled-payment-consent-account-by-id-nickname" *matCellDef="let element" class="identification-table-cell">
                     {{element.Initiation.CreditorAccount.Identification}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="instructedAmount">
                   <mat-header-cell *matHeaderCellDef> InstructedAmount </mat-header-cell>
-                  <mat-cell id="account-by-id-currency" *matCellDef="let element">
+                  <mat-cell id="get-domestic-scheduled-payment-consent-account-by-id-currency" *matCellDef="let element">
                     {{element.Initiation.InstructedAmount.Amount}} {{element.Initiation.InstructedAmount.Currency}}
                   </mat-cell>
                 </ng-container>
@@ -143,7 +150,7 @@
                 <mat-row *matRowDef="let row; columns: domesticPaymentConsentDisplayedColumns;"></mat-row>
               </mat-table>
               <div *ngIf="isEmptyAccountsById" class="empty-result-text">No results.</div>
-              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              <mat-paginator #domesticScheduledPaymentConsentPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-expansion-panel>
@@ -153,7 +160,7 @@
 </mat-card>
 <mat-card>
   <mat-accordion>
-    <mat-expansion-panel>
+    <mat-expansion-panel id="domestic-scheduled-payment-accordion">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Domestic Scheduled Payment
@@ -164,7 +171,7 @@
         <p>{{domesticScheduledPaymentId}}</p>
       </div>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion create">
+        <mat-expansion-panel class="nested-accordion create" id="create-domestic-scheduled-payment-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Create Domestic Scheduled Payment
@@ -172,83 +179,90 @@
           </mat-expansion-panel-header>
           <div class="payment-header">
             <div class="payment-header-right">
-              <mat-checkbox [(ngModel)]="deptorChecked">With debtor data</mat-checkbox>
+              <mat-checkbox id="domestic-scheduled-payment-with-debtor-data-checkbox" labelPosition="before" [(ngModel)]="debtorChecked">With Debtor data</mat-checkbox>
             </div>
           </div>
           <mat-form-field class="example-full-width" class="param-input">
-            <input class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #createdConsentId>
+            <input id="create-domestic-scheduled-payment-consent-id" class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #createdConsentId>
           </mat-form-field>
           <form class="form-group" [formGroup]="paymentForm"
             (ngSubmit)="createScheduledPayment(createdConsentId.value)">
             <h5>Instructed amount</h5>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="amount" class="form-control" formControlName="instructedAmount"
+              <input matInput type="text" id="create-domestic-scheduled-payment-amount" class="form-control" formControlName="instructedAmount"
                 [formGroup]="paymentForm" placeholder="Instructed amount">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="currency" class="form-control" formControlName="instructedAmountCurrency"
+              <input matInput type="text" id="create-domestic-scheduled-payment-currency" class="form-control" formControlName="instructedAmountCurrency"
                 [formGroup]="paymentForm" placeholder="Instructed amount currency">
             </mat-form-field>
             <h5>Creditor account</h5>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-creditorAccountIdentification" class="form-control"
                 formControlName="creditorAccountIdentification" [formGroup]="paymentForm"
                 placeholder="Creditor account identification">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="name" class="form-control" formControlName="creditorAccountName"
+              <input matInput type="text" id="create-domestic-scheduled-payment-name" class="form-control" formControlName="creditorAccountName"
                 [formGroup]="paymentForm" placeholder="Creditor account name">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-creditorAccountSchemeName" class="form-control"
                 formControlName="creditorAccountSchemeName" [formGroup]="paymentForm"
                 placeholder="Creditor account scheme name">
             </mat-form-field>
             <h5>Remittance information</h5>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationReference" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-remittanceInformationReference" class="form-control"
                 formControlName="remittanceInformationReference" [formGroup]="paymentForm"
                 placeholder="Remittance information reference">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationUnstructured" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-remittanceInformationUnstructured" class="form-control"
                 formControlName="remittanceInformationUnstructured" [formGroup]="paymentForm"
                 placeholder="Remittance information unstructured">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="instructionIdentification" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-instructionIdentification" class="form-control"
                 formControlName="instructionIdentification" [formGroup]="paymentForm"
                 placeholder="Instruction identification">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="requestedExecutionDateTime" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-requestedExecutionDateTime" class="form-control"
                 formControlName="requestedExecutionDateTime" [formGroup]="paymentForm"
                 placeholder="Requested Execution Date Time">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput type="text" id="endToEndIdentification" class="form-control"
+              <input matInput type="text" id="create-domestic-scheduled-payment-endToEndIdentification" class="form-control"
                 formControlName="endToEndIdentification" [formGroup]="paymentForm"
                 placeholder="End to end identification">
             </mat-form-field>
-            <div *ngIf="deptorChecked">
+            <div>
+              <h5>Local Instrument</h5>
+              <mat-form-field class="example-full-width">
+                <input matInput type="text" id="create-domestic-scheduled-payment-localInstrument" class="form-control"
+                  formControlName="localInstrument" [formGroup]="paymentForm" placeholder="Local Instrument">
+              </mat-form-field>
+            </div>
+            <div *ngIf="debtorChecked">
               <h5>Debtor account</h5>
               <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
+                <input matInput type="text" id="create-domestic-scheduled-payment-debtorAccountSchemeName" class="form-control"
                   formControlName="debtorAccountSchemeName" [formGroup]="paymentForm"
                   placeholder="Debtor account scheme name">
               </mat-form-field>
               <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
+                <input matInput type="text" id="create-domestic-scheduled-payment-debtorAccountIdentification" class="form-control"
                   formControlName="debtorAccountIdentification" [formGroup]="paymentForm"
                   placeholder="Debtor account identification">
               </mat-form-field>
               <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountName" class="form-control"
+                <input matInput type="text" id="create-domestic-scheduled-payment-debtorAccountName" class="form-control"
                   formControlName="debtorAccountName" [formGroup]="paymentForm" placeholder="Debtor account name">
               </mat-form-field>
             </div>
             <div class="create-payment">
-              <button [disabled]="createdConsentId.value.length == 0" type="submit"
+              <button id="domestic-scheduled-payment-create-button" [disabled]="createdConsentId.value.length == 0" type="submit"
                 mat-raised-button>{{'create' | uppercase}}</button>
               <div *ngIf="domesticScheduledPaymentId" class="created-successfully">Successful payment creation</div>
             </div>
@@ -256,7 +270,7 @@
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get" [expanded]="domesticScheduledPaymentId ? true :false">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="domesticScheduledPaymentId ? true :false" id="get-domestic-scheduled-payment-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Get Domestic Scheduled Payment
@@ -266,10 +280,10 @@
             <p class="get-payment-title">Domestic Scheduled Payment by payment ID</p>
           </div>
           <mat-form-field class="example-full-width">
-            <input class="add-consent-id" matInput placeholder="Payment ID" value="{{domesticScheduledPaymentId}}"
+            <input id="get-domestic-scheduled-payment-payment-id" class="add-consent-id" matInput placeholder="Payment ID" value="{{domesticScheduledPaymentId}}"
               #paymentId>
           </mat-form-field>
-          <button name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
+          <button id="domestic-scheduled-payment-get-data-button" name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
             class="header-button-right" [disabled]="paymentId.value.length == 0"
             (click)="getScheduledPayment(paymentId.value)">{{'Get
                             data' | uppercase}}</button>
@@ -278,17 +292,17 @@
               <mat-table id="account-by-id-table" #table [dataSource]="domesticPaymentDataSource">
                 <ng-container matColumnDef="status" class="status-cell">
                   <mat-header-cell *matHeaderCellDef>Status </mat-header-cell>
-                  <mat-cell id="account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
+                  <mat-cell id="get-domestic-scheduled-payment-account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="identification">
                   <mat-header-cell *matHeaderCellDef class="identification-table-cell"> Identification </mat-header-cell>
-                  <mat-cell id="account-by-id-nickname" *matCellDef="let element" class="identification-table-cell">
+                  <mat-cell id="get-domestic-scheduled-payment-account-by-id-nickname" *matCellDef="let element" class="identification-table-cell">
                     {{element.Initiation.CreditorAccount.Identification}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="instructedAmount">
                   <mat-header-cell *matHeaderCellDef> InstructedAmount </mat-header-cell>
-                  <mat-cell id="account-by-id-currency" *matCellDef="let element">
+                  <mat-cell id="get-domestic-scheduled-payment-account-by-id-currency" *matCellDef="let element">
                     {{element.Initiation.InstructedAmount.Amount}} {{element.Initiation.InstructedAmount.Currency}}
                   </mat-cell>
                 </ng-container>
@@ -306,7 +320,7 @@
                 <mat-row *matRowDef="let row; columns: domesticPaymentDisplayedColumns;"></mat-row>
               </mat-table>
               <div *ngIf="isEmptyPayment" class="empty-result-text">No results.</div>
-              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              <mat-paginator #domesticScheduledPaymentPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-expansion-panel>

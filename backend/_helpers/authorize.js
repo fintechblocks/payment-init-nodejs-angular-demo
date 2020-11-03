@@ -1,13 +1,14 @@
 const jose = require('node-jose');
 const fs = require('fs');
 /*sdk*/
-const OIDC_SERVER_URL = process.env.OIDC_SERVER_URL;
-const OIDC_REALM = process.env.OIDC_REALM;
+const AUTH_SERVER_BASE_PATH = process.env.AUTH_SERVER_BASE_PATH;
+const cert = process.env.HTTPS_CLIENT_CERT;
+const key = process.env.HTTPS_CLIENT_KEY;
 
-var paymentInitClientId = process.env.CLIENT_ID || 'ftb-demo-app@payment-init';
+var paymentInitClientId = process.env.CLIENT_ID || 'ftb-demo-app@payment-init-1.0';
 var paymentInitScope = 'payments';
-var tokenEndpointUri = `${OIDC_SERVER_URL}/auth/realms/${OIDC_REALM}/protocol/openid-connect/token`;
-var authEndpointUri = `${OIDC_SERVER_URL}/auth/realms/${OIDC_REALM}/protocol/openid-connect/auth`;
+var tokenEndpointUri = `${AUTH_SERVER_BASE_PATH}/protocol/openid-connect/token`;
+var authEndpointUri = `${AUTH_SERVER_BASE_PATH}/protocol/openid-connect/auth`;
 const paymentInitRedirectUri = process.env.REDIRECT_URL;
 const OpenBankingAuth = require('./sdk/OpenBankingAuth').OpenBankingAuth;
 var paymentInitAuth;
@@ -17,7 +18,7 @@ const privateKey = process.env.PRIVATE_KEY || fs.readFileSync('./keys/private_ke
 const publicKey = process.env.PUBLIC_KEY || fs.readFileSync('./keys/public_key.txt');
 
 initDemoapp(privateKey, publicKey).catch(function (error) {
-  console.log('Generate key ID error: ', error);
+  console.log('Initialization error: ', error);
 });
 
 module.exports = {
@@ -29,8 +30,11 @@ module.exports = {
 };
 
 async function initDemoapp(privateKey, publicKey) {
+  //console.log(`"${privateKey.substring(0, 50)}...\n...${privateKey.substr(privateKey.length - 50)}"`);
   const keyID = await generateKeyId(publicKey);
-  paymentInitAuth = new OpenBankingAuth(paymentInitClientId, privateKey, keyID, paymentInitRedirectUri, tokenEndpointUri, authEndpointUri, paymentInitScope);
+  console.log(`Generated key id: ${keyID}`);
+  paymentInitAuth = new OpenBankingAuth(paymentInitClientId, privateKey, keyID, paymentInitRedirectUri, tokenEndpointUri, authEndpointUri, paymentInitScope, cert, key);
+  await paymentInitAuth.createClient();
 }
 
 async function generateKeyId(publicKey) {

@@ -63,7 +63,7 @@ export class DomesticPaymentsService {
 
 
     /**
-     * Create Domestic Payment Consents
+     * Add Domestic Payments
      * 
      * @param OBWriteDomesticConsent2Param Default
      * @param Authorization An Authorisation Token as per https://tools.ietf.org/html/rfc6750
@@ -142,8 +142,6 @@ export class DomesticPaymentsService {
         if (httpContentTypeSelected != undefined) {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
-        console.log("base", `${this.basePath}/domestic-payment-consents`);
-
         return this.httpClient.post<OBWriteDomesticConsentResponse2>(`${this.basePath}/domestic-payment-consents`,
             OBWriteDomesticConsent2Param,
             {

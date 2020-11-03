@@ -13,13 +13,11 @@ services:
     build: ./frontend
     restart: on-failure
     expose:
-      - 4200
+      - 4201
     environment:
       - VIRTUAL_HOST=${FRONTEND_HOST}
     volumes:
-      - ./frontend-env.json:/usr/share/nginx/html/assets/environments/environment.json
-    links:
-      - backend
+      - ./frontend-env-local.json:/home/payment-init-demo-app/deploy/dist/assets/environments/environment.json
     depends_on:
       - backend
 
@@ -32,20 +30,17 @@ services:
       - VIRTUAL_HOST=${BACKEND_HOST}
       - REDIRECT_URL=${REDIRECT_URL}
       - WELL_KNOWN_URL=${OIDC_WELL_KNOWN_URL}
-      - MONGO_CONNECTION=mongodb://mongodb:27017/demo
+      - MONGO_CONNECTION=demoappmongodb://mongodb:27017/demo
       - CLIENT_SECRET=${CLIENT_SECRET}
-      - API_URL=${API_URL}
       - PAYMENT_INIT_API_URL=${PAYMENT_INIT_API_URL}
       - NODE_TLS_REJECT_UNAUTHORIZED=0
       - CLIENT_ID=${CLIENT_ID}
       - PORT=8080
-
-    links:
-      - mongodb
+      - AUTH_SERVER_BASE_PATH=${AUTH_SERVER_BASE_PATH}
     depends_on:
-      - mongodb
+      - demoappmongodb
 
-  mongodb:
+  demoappmongodb:
     image: mongo
     ports:
       - 27017:27017

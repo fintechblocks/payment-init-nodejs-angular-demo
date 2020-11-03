@@ -20,23 +20,23 @@ export class DomesticPaymentsComponent implements OnInit {
   keys = Object.keys;
   paymentForm: FormGroup;
   emptyAuthorization: string = "";
-  consentDeptorChecked: boolean = false;
-  deptorChecked: boolean = false;
+  consentDebtorChecked: boolean = false;
+  debtorChecked: boolean = false;
   domesticPaymentPaymentId;
 
   domesticPaymentConsentDataSource;
   domesticPaymentConsentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentConsentPaginator: MatPaginator;
+  @ViewChild('domesticPaymentConsentPaginator') domesticPaymentConsentPaginator: MatPaginator;
   isEmptyPaymentConsent;
 
   domesticPaymentConsentFundsConfirmationDataSource;
   domesticPaymentConsentFundsConfirmationDisplayedColumns: string[] = ['fundsAvailableDateTime', 'fundsAvailable', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentConsentFundsConfirmationPaginator: MatPaginator;
+  @ViewChild('domesticPaymentConsentFundsConfirmationPaginator') domesticPaymentConsentFundsConfirmationPaginator: MatPaginator;
   isEmptyFundsConfirmation;
 
   domesticPaymentDataSource;
   domesticPaymentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentPaginator: MatPaginator;
+  @ViewChild('domesticPaymentPaginator') domesticPaymentPaginator: MatPaginator;
   isEmptyPayment;
 
   constructor(
@@ -52,17 +52,23 @@ export class DomesticPaymentsComponent implements OnInit {
   ngOnInit() {
     this.paymentForm = this.formBuilder.group({
       instructedAmountCurrency: ['HUF'],
-      instructedAmount: ['1680.00'],
+      instructedAmount: ['100000.00'],
       instructionIdentification: ['mobilVallet123'],
       endToEndIdentification: ['29152852756654'],
       creditorAccountSchemeName: ['IBAN'],
       creditorAccountIdentification: ['HU35120103740010183300200004'],
       creditorAccountName: ['Deichmann Cipőkereskedelmi Korlátolt Felelősségű Társaság'],
-      debtorAccountSchemeName: ["IBAN"],
-      debtorAccountIdentification: ["HU23103000029321814060584399"],
+      debtorAccountSchemeName: ["BBAN"],
+      debtorAccountIdentification: ["141002132044784901000009"],
       debtorAccountName: ["Kiss Pista"],
       remittanceInformationReference: ["FRESCO-101"],
-      remittanceInformationUnstructured: ["Internal ops code 5120101"]
+      remittanceInformationUnstructured: ["Internal ops code 5120101"],
+      localInstrument: [""],
+      mobile: [""],
+      taxNumber: [""],
+      taxPayerIdentificationNumber: [""],
+      email: [""],
+      requestToPayId: [""]
     });
   }
 
@@ -151,6 +157,7 @@ export class DomesticPaymentsComponent implements OnInit {
         Initiation: {
           InstructionIdentification: paymentFormValue.instructionIdentification,
           EndToEndIdentification: paymentFormValue.endToEndIdentification,
+          LocalInstrument: paymentFormValue.localInstrument,
           InstructedAmount: {
             Amount: paymentFormValue.instructedAmount,
             Currency: paymentFormValue.instructedAmountCurrency
@@ -158,13 +165,20 @@ export class DomesticPaymentsComponent implements OnInit {
           CreditorAccount: {
             SchemeName: paymentFormValue.creditorAccountSchemeName,
             Identification: paymentFormValue.creditorAccountIdentification,
-            Name: paymentFormValue.creditorAccountName
+            Name: paymentFormValue.creditorAccountName,
+            InstantPaymentIdentifiers: {
+              Mobile: paymentFormValue.mobile,
+              TaxNumber: paymentFormValue.taxNumber,
+              TaxpayerIdentificationNumber: paymentFormValue.taxPayerIdentificationNumber,
+              EmailAddress: paymentFormValue.email
+            }
           },
           RemittanceInformation: {
             Reference: paymentFormValue.remittanceInformationReference,
             Unstructured: paymentFormValue.remittanceInformationUnstructured
           },
-          DebtorAccount: {}
+          DebtorAccount: {},
+          RequestToPayId: paymentFormValue.requestToPayId
         }
       },
       Risk: {}
@@ -174,15 +188,13 @@ export class DomesticPaymentsComponent implements OnInit {
       body.Data.ConsentId = consentId;
     }
     
-    if (this.consentDeptorChecked || this.deptorChecked) {
+    if (this.consentDebtorChecked || this.debtorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,
         Name: paymentFormValue.debtorAccountName
       }
     }
-
-
 
     let cleanedRequestBody = this._helpersService.cleanObjectsFromEmptyElements(body);
     cleanedRequestBody.Risk = {};

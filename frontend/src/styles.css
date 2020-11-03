@@ -8,3 +8,8 @@ body {
   background: #F8F8F8;
 
 }
+
+pre {
+  max-height: 600px;
+  overflow-y: auto;
+}

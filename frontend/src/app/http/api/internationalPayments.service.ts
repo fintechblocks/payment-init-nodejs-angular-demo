@@ -63,7 +63,7 @@ export class InternationalPaymentsService {
 
 
     /**
-     * Create International Payment Consents
+     * Add International Payments
      * 
      * @param OBWriteInternationalConsent2Param Default
      * @param Authorization An Authorisation Token as per https://tools.ietf.org/html/rfc6750

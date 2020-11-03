@@ -2,7 +2,7 @@
 
 const utils = require('./utils');
 module.exports.OpenBankingAuth = class OpenBankingAuth {
-  constructor(clientId, privateKey, keyID, redirectUri, tokenEndpointUri, authEndpointUri, scope, issuer, jwksUri) {
+  constructor(clientId, privateKey, keyID, redirectUri, tokenEndpointUri, authEndpointUri, scope, issuer, jwksUri, clientCert, clientKey) {
     this.clientId = clientId;
     this.privateKey = privateKey;
     this.keyID = keyID;
@@ -12,12 +12,16 @@ module.exports.OpenBankingAuth = class OpenBankingAuth {
     this.scope = scope;
     this.issuer = issuer;
     this.jwksUri = jwksUri;
+    this.clientCert = clientCert;
+    this.clientKey = clientKey;
+  }
+
+  async createClient() {
+    this.client = await utils.createClient(this.clientId, this.privateKey, this.tokenEndpointUri, this.authEndpointUri, this.issuer, this.jwksUri, this.keyID);
   }
 
   async getAccessToken() {
-    var client = await utils.createClient(this.clientId, this.privateKey, this.tokenEndpointUri, this.authEndpointUri, this.issuer, this.jwksUri, this.keyID);
-    this.client = client;
-    const accessTokenWithClientCredentials = await client.grant({
+    const accessTokenWithClientCredentials = await this.client.grant({
       grant_type: 'client_credentials',
       scope: this.scope
     });
@@ -40,9 +44,7 @@ module.exports.OpenBankingAuth = class OpenBankingAuth {
           }
         }
       }
-    }, this.privateKey, {
-      algorithm: 'RS256'
-    });
+    }, this.privateKey, { algorithm: 'RS256' });
 
     return this.client.authorizationUrl({
       scope: `openid ${this.scope}`,

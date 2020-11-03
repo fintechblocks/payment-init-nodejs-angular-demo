@@ -40,3 +40,5 @@ typings
 #keys
 keys/aggreg8.hu.key
 keys/cert.pem
+keys/pub_key_openshift.crt
+keys/priv_key_openshift.pem

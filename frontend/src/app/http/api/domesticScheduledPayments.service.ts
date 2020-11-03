@@ -62,7 +62,7 @@ export class DomesticScheduledPaymentsService {
 
 
     /**
-     * Create Domestic Scheduled Payment Consents
+     * Add Domestic Scheduled Payments
      * 
      * @param OBWriteDomesticScheduledConsent2Param Default
      * @param Authorization An Authorisation Token as per https://tools.ietf.org/html/rfc6750

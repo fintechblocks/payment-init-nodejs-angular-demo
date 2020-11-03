@@ -1,6 +1,6 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { HelpersService } from '../../_services';
@@ -23,22 +23,22 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
   paymentForm: FormGroup;
   payment: any;
   emptyAuthorization: string = "";
-  deptorChecked: boolean = false;
-  consentDeptorChecked: boolean = false;
+  debtorChecked: boolean = false;
+  consentDebtorChecked: boolean = false;
   internationalScheduledPaymentId;
   internationalPaymentConsentDataSource;
   internationalPaymentConsentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) internationalPaymentConsentPaginator: MatPaginator;
+  @ViewChild('internationalScheduledPaymentConsentPaginator') internationalPaymentConsentPaginator: MatPaginator;
   isEmptyPaymentConsent;
 
   internationalPaymentConsentFundsConfirmationDataSource;
   internationalPaymentConsentFundsConfirmationDisplayedColumns: string[] = ['fundsAvailableDateTime', 'fundsAvailable', 'arrow'];
-  @ViewChild(MatPaginator) internationalPaymentConsentFundsConfirmationPaginator: MatPaginator;
+  @ViewChild('internationalScheduledPaymentConsentFundsConfirmationPaginator') internationalPaymentConsentFundsConfirmationPaginator: MatPaginator;
   isEmptyFundsConfirmation;
 
   internationalPaymentDataSource;
   internationalPaymentDisplayedColumns: string[] = ['status', 'identification', 'instructedAmount', 'arrow'];
-  @ViewChild(MatPaginator) internationalPaymentPaginator: MatPaginator;
+  @ViewChild('internationalScheduledPaymentPaginator') internationalPaymentPaginator: MatPaginator;
   isEmptyPayment;
 
   constructor(
@@ -54,22 +54,40 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
   ngOnInit() {
     this.paymentForm = this.formBuilder.group({
       instructedAmountCurrency: ['HUF'],
-      instructedAmount: ['1680.00'],
+      instructedAmount: ['100000.00'],
       instructionIdentification: ['mobilVallet123'],
       endToEndIdentification: ['29152852756654'],
-      requestedExecutionDateTime: ['2018-08-06T00:00:00+00:00'],
+      requestedExecutionDateTime: ['2020-08-06T00:00:00+00:00'],
       creditorAccountSchemeName: ['IBAN'],
       creditorAccountIdentification: ['HU35120103740010183300200004'],
       creditorAccountName: ['Deichmann Cipőkereskedelmi Korlátolt Felelősségű Társaság'],
-      debtorAccountSchemeName: ["IBAN"],
-      debtorAccountIdentification: ["HU23103000029321814060584399"],
+      debtorAccountSchemeName: ["BBAN"],
+      debtorAccountIdentification: ["141002132044784901000009"],
       debtorAccountName: ["Kiss Pista"],
       remittanceInformationReference: ["FRESCO-101"],
       remittanceInformationUnstructured: ["Internal ops code 5120101"],
       currencyOfTransfer: ["USD"],
       unitCurrency: ["GBP"],
-      rateType: ["Actual"]
+      rateType: ["Actual"],
+      localInstrument: [""],
+      chargeBearer: ["Shared"],
+      creditorName: ["CRENM"],
+      creditorPostalAddress: this.formBuilder.group({
+        creditorAddressLine: this.formBuilder.array(["Kis utca 13"])
+      }),
+      creditorAgentName: ["BANK_NAME"],
+      creditorAgentIdentification: ["BANKSWIFTCODE"]
     });
+  }
+
+  get creditorAddressLine(): FormArray {
+    return this.paymentForm.get("creditorPostalAddress").get("creditorAddressLine") as FormArray
+  }
+
+  addAddressLine():void {
+    if (this.creditorAddressLine.length < 7) {
+      this.creditorAddressLine.push(this.formBuilder.control(""));
+    }
   }
 
   createScheduledPaymentConsent() {
@@ -157,9 +175,11 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
         ConsentId: {},
         Permission: {},
         Initiation: {
+          ChargeBearer: paymentFormValue.chargeBearer,
           InstructionIdentification: paymentFormValue.instructionIdentification,
           EndToEndIdentification: paymentFormValue.endToEndIdentification,
           RequestedExecutionDateTime: paymentFormValue.requestedExecutionDateTime,
+          LocalInstrument: paymentFormValue.localInstrument,
           InstructedAmount: {
             Amount: paymentFormValue.instructedAmount,
             Currency: paymentFormValue.instructedAmountCurrency
@@ -168,6 +188,16 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
             SchemeName: paymentFormValue.creditorAccountSchemeName,
             Identification: paymentFormValue.creditorAccountIdentification,
             Name: paymentFormValue.creditorAccountName
+          },
+          CreditorAgent: {
+            Identification: paymentFormValue.creditorAgentIdentification,
+            Name: paymentFormValue.creditorAgentName
+          },
+          Creditor: {
+            Name: paymentFormValue.creditorName,
+            PostalAddress: {
+              AddressLine: paymentFormValue.creditorPostalAddress.creditorAddressLine
+            }
           },
           RemittanceInformation: {
             Reference: paymentFormValue.remittanceInformationReference,
@@ -190,7 +220,7 @@ export class InternationalScheduledPaymentsComponent implements OnInit {
       body.Data.Permission = "Create";
     }
 
-    if (this.deptorChecked || this.consentDeptorChecked) {
+    if (this.debtorChecked || this.consentDebtorChecked) {
       body.Data.Initiation.DebtorAccount = {
         SchemeName: paymentFormValue.debtorAccountSchemeName,
         Identification: paymentFormValue.debtorAccountIdentification,

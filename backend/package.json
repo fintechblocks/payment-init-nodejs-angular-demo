@@ -9,7 +9,7 @@
     },
     "scripts": {
         "start": "node server.js",
-        "local": "set PAYMENT_INIT_API_URL=https://api.sandbox.exampleBank.hu/payment-init-1.0&& set REDIRECT_URL=http://localhost:4200&& set WELL_KNOWN_URL=https://api.sandbox.exampleBank.hu/auth/realms/ftb-sandbox/.well-known/openid-configuration&& set API_URL=https://api.sandbox.exampleBank.hu&& set CLIENT_ID=demo&& set CLIENT_SECRET=demo&& nodemon ./server.js",
+        "local": "set PAYMENT_INIT_API_URL=https://api.sandbox.exampleBank.hu/payment-init-1.0&& set REDIRECT_URL=http://localhost:4201&& set WELL_KNOWN_URL=https://api.sandbox.exampleBank.hu/auth/realms/ftb-sandbox/.well-known/openid-configuration&& set CLIENT_ID=demo&& set CLIENT_SECRET=demo&& nodemon ./server.js",
         "test": "mocha"
     },
     "dependencies": {
@@ -17,7 +17,6 @@
         "body-parser": "^1.18.3",
         "chai": "^4.1.2",
         "cors": "^2.8.4",
-        "crypto": "^1.0.1",
         "dotenv": "^6.0.0",
         "express": "^4.16.3",
         "express-jwt": "^5.3.1",
@@ -33,8 +32,7 @@
         "request": "^2.87.0",
         "request-promise": "^4.2.2",
         "restify-clients": "^2.5.0",
-        "rootpath": "^0.1.2",
-        "vo": "^4.0.2"
+        "rootpath": "^0.1.2"
     },
     "devDependencies": {
         "nodemon": "^1.17.5"

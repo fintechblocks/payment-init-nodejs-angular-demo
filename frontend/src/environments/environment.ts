@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:4000/payment-init-1.0'
+  apiUrl: 'http://localhost:4000'
 };

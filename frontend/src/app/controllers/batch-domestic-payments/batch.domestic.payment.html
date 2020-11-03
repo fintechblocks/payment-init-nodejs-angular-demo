@@ -1,163 +1,307 @@
 <mat-card>
   <mat-accordion>
-    <mat-expansion-panel [expanded]="consent_id ? true :false">
+    <mat-expansion-panel [expanded]="consent_id ? true :false" id="batch-domestic-payment-consent-accordion">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Batch Domestic Payment Consent
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion create">
+        <mat-expansion-panel class="nested-accordion create" id="create-batch-domestic-payment-consent-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Batch Create Domestic Payment Consent
+              Create Batch Domestic Payment Consent
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="payment-header">
-            <div class="payment-header-right">
-              <mat-checkbox [(ngModel)]="consentDeptorChecked">With debtor data</mat-checkbox>
+          <mat-accordion>
+            <mat-expansion-panel id="batch-domestic-payment-consent-add-domestic-payment-accordion">
+              <div class="add-batch-payment-div">
+                <i class="material-icons blue bring-forward" (click)="addDomesticPaymentToArray()">
+                  add_box
+                </i>
+              </div>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Add Domestic Payments</mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion>
+                <mat-expansion-panel *ngFor="let domesticPayment of domesticPayments.controls; let domesticPaymentConsentFormIndex = index;" [id]="'batch-domestic-payment-consent-domestic-payment-'+domesticPaymentConsentFormIndex">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>{{domesticPaymentConsentFormIndex+1}}. Domestic Payment</mat-panel-title>
+                    <mat-panel-description>
+                      <i *ngIf="domesticPayments.controls.length>1" class="material-icons blue mat-expansion-panel-header-description"
+                        (click)="deleteDomesticPaymentFromArray(domesticPaymentConsentFormIndex)">
+                        delete
+                      </i>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <form class="form-group" [formGroup]="domesticPaymentForm">
+                    <div formArrayName="domesticPayments">
+                      <div [formGroupName]="domesticPaymentConsentFormIndex">
+                        <h4>{{domesticPaymentConsentFormIndex+1}}. Domestic Payment</h4>
+                        <h5>Instructed amount</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-consent-amount-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="instructedAmount" placeholder="Instructed amount">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-consent-currency-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="instructedAmountCurrency"
+                            placeholder="Instructed amount currency">
+                        </mat-form-field>
+                        <h5>Creditor account</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-creditorAccountIdentification-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="creditorAccountIdentification"
+                            placeholder="Creditor account identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-consent-name-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="creditorAccountName"
+                            placeholder="Creditor account name">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-secondaryIdentification-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="secondaryIdentification"
+                            placeholder="Secondary Identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-creditorAccountSchemeName-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="creditorAccountSchemeName"
+                            placeholder="Creditor account scheme name">
+                        </mat-form-field>
+                        <h5>Instant Payment Identifiers</h5>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-mobile-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="mobile"
+                            placeholder="Mobile">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-taxnumber-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="taxNumber"
+                            placeholder="Tax Number">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-taxpayer-identification-number-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="taxPayerIdentificationNumber"
+                            placeholder="Taxpayer Identification Number">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-email-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="email"
+                            placeholder="Email">
+                        </mat-form-field>
+                        <h5>Remittance information</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-remittanceInformationReference-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="remittanceInformationReference"
+                            placeholder="Remittance information reference">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-remittanceInformationUnstructured-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="remittanceInformationUnstructured"
+                            placeholder="Remittance information unstructured">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-instructionIdentification-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="instructionIdentification"
+                            placeholder="Instruction identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-endToEndIdentification-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="endToEndIdentification"
+                            placeholder="End to end identification">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-consent-request-to-pay-id-'+domesticPaymentConsentFormIndex"
+                            class="form-control" formControlName="requestToPayId"
+                            placeholder="Request To Pay ID">
+                        </mat-form-field>
+                        <div>
+                          <h5>Local Instrument</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-consent-localInstrument-'+domesticPaymentConsentFormIndex" class="form-control"
+                              formControlName="localInstrument" placeholder="Local Instrument">
+                          </mat-form-field>
+                        </div>
+                        <div>
+                          <h5>Debtor account</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-consent-debtorAccountSchemeName-'+domesticPaymentConsentFormIndex"
+                              class="form-control" formControlName="debtorAccountSchemeName"
+                              placeholder="Debtor account scheme name">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-consent-debtorAccountIdentification-'+domesticPaymentConsentFormIndex"
+                              class="form-control" formControlName="debtorAccountIdentification"
+                              placeholder="Debtor account identification">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-consent-debtorAccountName-'+domesticPaymentConsentFormIndex" class="form-control"
+                              formControlName="debtorAccountName" placeholder="Debtor account name">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-accordion>
+            <mat-expansion-panel>
+            <div class="add-batch-payment-div">
+              <i class="material-icons blue bring-forward" (click)="addDomesticScheduledPaymentToArray()">
+                add_box
+              </i>
             </div>
+              <mat-expansion-panel-header id="batch-domestic-payment-consent-add-domestic-scheduled-payment-accordion">
+                <mat-panel-title>Add Domestic Scheduled Payments</mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion>
+                <mat-expansion-panel
+                  *ngFor="let domesticScheduledPayment of domesticScheduledPayments.controls; let domesticScheduledPaymentConsentFormIndex = index;" [id]="'batch-domestic-payment-consent-domestic-scheduled-payment-'+domesticScheduledPaymentConsentFormIndex">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>{{domesticScheduledPaymentConsentFormIndex+1}}. Domestic Scheduled Payment</mat-panel-title>
+                    <mat-panel-description>
+                      <i *ngIf="domesticScheduledPayments.controls.length>1"
+                      class="material-icons blue mat-expansion-panel-header-description"
+                        (click)="deleteDomesticScheduledPaymentFromArray(domesticScheduledPaymentConsentFormIndex)">
+                        delete
+                      </i>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <form [formGroup]="domesticScheduledPaymentForm">
+                    <div formArrayName="domesticScheduledPayments">
+                      <div [formGroupName]="domesticScheduledPaymentConsentFormIndex">
+                        <h4>{{domesticScheduledPaymentConsentFormIndex+1}}. Domestic Scheduled Payment</h4>
+                        <h5>Instructed amount</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-scheduled-payment-consent-amount-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledInstructedAmount"
+                            placeholder="Instructed amount">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-currency-'+domesticScheduledPaymentConsentFormIndex" class="form-control"
+                            formControlName="scheduledInstructedAmountCurrency"
+                            placeholder="Instructed amount currency">
+                        </mat-form-field>
+                        <h5>Creditor account</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-creditorAccountIdentification-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledCreditorAccountIdentification"
+                            placeholder="Creditor account identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-scheduled-payment-consent-name-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledCreditorAccountName"
+                            placeholder="Creditor account name">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-scheduledSecondaryIdentification-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledSecondaryIdentification"
+                            placeholder="Secondary Identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-creditorAccountSchemeName-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledCreditorAccountSchemeName"
+                            placeholder="Creditor account scheme name">
+                        </mat-form-field>
+                        <h5>Remittance information</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-remittanceInformationReference-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledRemittanceInformationReference"
+                            placeholder="Remittance information reference">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-remittanceInformationUnstructured-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledRemittanceInformationUnstructured"
+                            placeholder="Remittance information unstructured">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-instructionIdentification-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledInstructionIdentification"
+                            placeholder="Instruction identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-requestedExecutionDateTime-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledRequestedExecutionDateTime"
+                            placeholder="Requested Execution Date Time">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-consent-endToEndIdentification-'+domesticScheduledPaymentConsentFormIndex"
+                            class="form-control" formControlName="scheduledEndToEndIdentification"
+                            placeholder="End to end identification">
+                        </mat-form-field>
+                        <div>
+                          <h5>Local Instrument</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-consent-scheduledLocalInstrument-'+domesticScheduledPaymentConsentFormIndex"
+                              class="form-control" formControlName="scheduledLocalInstrument"
+                              placeholder="Local Instrument">
+                          </mat-form-field>
+                        </div>
+                        <div>
+                          <h5>Debtor account</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-scheduled-payment-consent-debtorAccountSchemeName-'+domesticScheduledPaymentConsentFormIndex"
+                              class="form-control" formControlName="scheduledDebtorAccountSchemeName"
+                              placeholder="Debtor account scheme name">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-scheduled-payment-consent-debtorAccountIdentification-'+domesticScheduledPaymentConsentFormIndex"
+                              class="form-control" formControlName="scheduledDebtorAccountIdentification"
+                              placeholder="Debtor account identification">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-scheduled-payment-consent-debtorAccountName-'+domesticScheduledPaymentConsentFormIndex"
+                              class="form-control" formControlName="scheduledDebtorAccountName"
+                              placeholder="Debtor account name">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div class="create-payment create-payment-buttons batch-create-button">
+            <button id="create-batch-domestic-payment-consent" type="submit" (click)="createPaymentConsent()"
+              mat-raised-button>{{'create' | uppercase}}</button>
           </div>
-          <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createPaymentConsent()">
-            <h4>Domestic Payment</h4>
-            <h5>Instructed amount</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="amount" class="form-control" formControlName="instructedAmount"
-                [formGroup]="paymentForm" placeholder="Instructed amount">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="currency" class="form-control" formControlName="instructedAmountCurrency"
-                [formGroup]="paymentForm" placeholder="Instructed amount currency">
-            </mat-form-field>
-            <h5>Creditor account</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
-                formControlName="creditorAccountIdentification" [formGroup]="paymentForm"
-                placeholder="Creditor account identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="name" class="form-control" formControlName="creditorAccountName"
-                [formGroup]="paymentForm" placeholder="Creditor account name">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
-                formControlName="creditorAccountSchemeName" [formGroup]="paymentForm"
-                placeholder="Creditor account scheme name">
-            </mat-form-field>
-            <h5>Remittance information</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationReference" class="form-control"
-                formControlName="remittanceInformationReference" [formGroup]="paymentForm"
-                placeholder="Remittance information reference">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationUnstructured" class="form-control"
-                formControlName="remittanceInformationUnstructured" [formGroup]="paymentForm"
-                placeholder="Remittance information unstructured">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="instructionIdentification" class="form-control"
-                formControlName="instructionIdentification" [formGroup]="paymentForm"
-                placeholder="Instruction identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="endToEndIdentification" class="form-control"
-                formControlName="endToEndIdentification" [formGroup]="paymentForm"
-                placeholder="End to end identification">
-            </mat-form-field>
-            <div *ngIf="consentDeptorChecked">
-              <h5>Debtor account</h5>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
-                  formControlName="debtorAccountSchemeName" [formGroup]="paymentForm"
-                  placeholder="Debtor account scheme name">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
-                  formControlName="debtorAccountIdentification" [formGroup]="paymentForm"
-                  placeholder="Debtor account identification">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountName" class="form-control"
-                  formControlName="debtorAccountName" [formGroup]="paymentForm" placeholder="Debtor account name">
-              </mat-form-field>
-            </div>
-            <h4>Domestic Scheduled Payment</h4>
-            <h5>Instructed amount</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="amount" class="form-control" formControlName="scheduledInstructedAmount"
-                [formGroup]="paymentForm" placeholder="Instructed amount">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="currency" class="form-control"
-                formControlName="scheduledInstructedAmountCurrency" [formGroup]="paymentForm"
-                placeholder="Instructed amount currency">
-            </mat-form-field>
-            <h5>Creditor account</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
-                formControlName="scheduledCreditorAccountIdentification" [formGroup]="paymentForm"
-                placeholder="Creditor account identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="name" class="form-control" formControlName="scheduledCreditorAccountName"
-                [formGroup]="paymentForm" placeholder="Creditor account name">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
-                formControlName="scheduledCreditorAccountSchemeName" [formGroup]="paymentForm"
-                placeholder="Creditor account scheme name">
-            </mat-form-field>
-            <h5>Remittance information</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationReference" class="form-control"
-                formControlName="scheduledRemittanceInformationReference" [formGroup]="paymentForm"
-                placeholder="Remittance information reference">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationUnstructured" class="form-control"
-                formControlName="scheduledRemittanceInformationUnstructured" [formGroup]="paymentForm"
-                placeholder="Remittance information unstructured">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="instructionIdentification" class="form-control"
-                formControlName="scheduledInstructionIdentification" [formGroup]="paymentForm"
-                placeholder="Instruction identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="requestedExecutionDateTime" class="form-control"
-                formControlName="scheduledRequestedExecutionDateTime" [formGroup]="paymentForm"
-                placeholder="Requested Execution Date Time">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="endToEndIdentification" class="form-control"
-                formControlName="scheduledEndToEndIdentification" [formGroup]="paymentForm"
-                placeholder="End to end identification">
-            </mat-form-field>
-            <div *ngIf="deptorChecked">
-              <h5>Debtor account</h5>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
-                  formControlName="scheduledDebtorAccountSchemeName" [formGroup]="paymentForm"
-                  placeholder="Debtor account scheme name">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
-                  formControlName="scheduledDebtorAccountIdentification" [formGroup]="paymentForm"
-                  placeholder="Debtor account identification">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountName" class="form-control"
-                  formControlName="scheduledDebtorAccountName" [formGroup]="paymentForm"
-                  placeholder="Debtor account name">
-              </mat-form-field>
-            </div>
-            <button type="submit" mat-raised-button>{{'create' | uppercase}}</button>
-          </form>
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get" [expanded]="consent_id ? true :false">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="consent_id ? true :false" id="get-batch-domestic-payment-consent-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Get Batch Domestic Payment Consent
@@ -169,30 +313,34 @@
           <div>
             <h6>Consent ID</h6>
             <mat-form-field class="example-full-width">
-              <input class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #consentId>
+              <input id="batch-domestic-payment-consent-id" class="add-consent-id" matInput placeholder="Consent ID"
+                value="{{consent_id}}" #consentId>
             </mat-form-field>
           </div>
-          <button name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
+          <button id="batch-domestic-payment-consent-get-data-button" name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
             class="header-button-right" [disabled]="consentId.value.length == 0"
             (click)="getPaymentConsent(consentId.value)">{{'Get
                           data' | uppercase}}</button>
           <mat-card-content>
             <div *ngIf="domesticPaymentConsentDataSource">
-              <mat-table id="account-by-id-table" #table [dataSource]="domesticPaymentConsentDataSource">
+              <mat-table id="get-batch-domestic-payment-consent-account-by-id-table" #table
+                [dataSource]="domesticPaymentConsentDataSource">
                 <ng-container matColumnDef="status">
                   <mat-header-cell *matHeaderCellDef>Status </mat-header-cell>
-                  <mat-cell id="account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
+                  <mat-cell id="get-batch-domestic-payment-consent-account-by-id-account-id" *matCellDef="let element">
+                    {{element.Status}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="statusUpdateDateTime">
-                  <mat-header-cell *matHeaderCellDef class="identification-table-cell"> StatusUpdateDateTime </mat-header-cell>
-                  <mat-cell id="statusUpdateDateTime-consent" *matCellDef="let element"
+                  <mat-header-cell *matHeaderCellDef class="identification-table-cell"> StatusUpdateDateTime
+                  </mat-header-cell>
+                  <mat-cell id="get-batch-domestic-payment-consent-statusUpdateDateTime" *matCellDef="let element"
                     class="identification-table-cell">
                     {{element.StatusUpdateDateTime | date: 'yyyy-MM-dd'}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="creationDateTime">
                   <mat-header-cell *matHeaderCellDef> CreationDateTime </mat-header-cell>
-                  <mat-cell id="creationDateTime-cosnent" *matCellDef="let element">
+                  <mat-cell id="get-batch-domestic-payment-consent-creationDateTime" *matCellDef="let element">
                     {{element.CreationDateTime | date: 'yyyy-MM-dd'}}
                   </mat-cell>
                 </ng-container>
@@ -210,7 +358,7 @@
                 <mat-row *matRowDef="let row; columns: domesticPaymentConsentDisplayedColumns;"></mat-row>
               </mat-table>
               <div *ngIf="isEmptyAccountsById" class="empty-result-text">No results.</div>
-              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              <mat-paginator #batchDomesticPaymentConsentPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-expansion-panel>
@@ -220,179 +368,315 @@
 </mat-card>
 <mat-card>
   <mat-accordion>
-    <mat-expansion-panel>
+    <mat-expansion-panel id="batch-domestic-payment-accordion">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Batch Domestic Payment
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div *ngIf="domesticPaymentPaymentId">
+      <div *ngIf="batchDomesticPaymentId">
         <p>Payment ID:</p>
-        <p>{{domesticPaymentPaymentId}}</p>
+        <p>{{batchDomesticPaymentId}}</p>
       </div>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion create">
+        <mat-expansion-panel class="nested-accordion create" id="create-batch-domestic-payment-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Create Batch Domestic Payments
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="payment-header">
-            <div class="payment-header-right">
-              <mat-checkbox [(ngModel)]="deptorChecked">With debtor data</mat-checkbox>
-            </div>
-          </div>
           <div>
             <h6>Consent ID</h6>
             <mat-form-field class="example-full-width" class="param-input">
-              <input class="add-consent-id" matInput placeholder="Consent ID" value="{{consent_id}}" #createdConsentId>
+              <input id="create-batch-domestic-payment-consent-id" class="add-consent-id" matInput
+                placeholder="Consent ID" value="{{consent_id}}" #createdConsentId>
             </mat-form-field>
           </div>
-          <form class="form-group" [formGroup]="paymentForm" (ngSubmit)="createPayment(createdConsentId.value)">
-            <h4>Domestic Payment</h4>
-            <h5>Instructed amount</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="amount" class="form-control" formControlName="instructedAmount"
-                [formGroup]="paymentForm" placeholder="Instructed amount">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="currency" class="form-control" formControlName="instructedAmountCurrency"
-                [formGroup]="paymentForm" placeholder="Instructed amount currency">
-            </mat-form-field>
-            <h5>Creditor account</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
-                formControlName="creditorAccountIdentification" [formGroup]="paymentForm"
-                placeholder="Creditor account identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="name" class="form-control" formControlName="creditorAccountName"
-                [formGroup]="paymentForm" placeholder="Creditor account name">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
-                formControlName="creditorAccountSchemeName" [formGroup]="paymentForm"
-                placeholder="Creditor account scheme name">
-            </mat-form-field>
-            <h5>Remittance information</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationReference" class="form-control"
-                formControlName="remittanceInformationReference" [formGroup]="paymentForm"
-                placeholder="Remittance information reference">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationUnstructured" class="form-control"
-                formControlName="remittanceInformationUnstructured" [formGroup]="paymentForm"
-                placeholder="Remittance information unstructured">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="instructionIdentification" class="form-control"
-                formControlName="instructionIdentification" [formGroup]="paymentForm"
-                placeholder="Instruction identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="endToEndIdentification" class="form-control"
-                formControlName="endToEndIdentification" [formGroup]="paymentForm"
-                placeholder="End to end identification">
-            </mat-form-field>
-            <div *ngIf="deptorChecked">
-              <h5>Debtor account</h5>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
-                  formControlName="debtorAccountSchemeName" [formGroup]="paymentForm"
-                  placeholder="Debtor account scheme name">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
-                  formControlName="debtorAccountIdentification" [formGroup]="paymentForm"
-                  placeholder="Debtor account identification">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountName" class="form-control"
-                  formControlName="debtorAccountName" [formGroup]="paymentForm" placeholder="Debtor account name">
-              </mat-form-field>
+          <mat-accordion>
+            <mat-expansion-panel id="batch-domestic-payment-create-domestic-payments-accordion">
+            <div class="add-batch-payment-div">
+              <i class="material-icons blue bring-forward"
+                (click)="addDomesticPaymentToArray()">
+                add_box
+              </i>
             </div>
-            <h4>Domestic Scheduled Payment</h4>
-            <h5>Instructed amount</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="amount" class="form-control" formControlName="scheduledInstructedAmount"
-                [formGroup]="paymentForm" placeholder="Instructed amount">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="currency" class="form-control"
-                formControlName="scheduledInstructedAmountCurrency" [formGroup]="paymentForm"
-                placeholder="Instructed amount currency">
-            </mat-form-field>
-            <h5>Creditor account</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountIdentification" class="form-control"
-                formControlName="scheduledCreditorAccountIdentification" [formGroup]="paymentForm"
-                placeholder="Creditor account identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="name" class="form-control" formControlName="scheduledCreditorAccountName"
-                [formGroup]="paymentForm" placeholder="Creditor account name">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="creditorAccountSchemeName" class="form-control"
-                formControlName="scheduledCreditorAccountSchemeName" [formGroup]="paymentForm"
-                placeholder="Creditor account scheme name">
-            </mat-form-field>
-            <h5>Remittance information</h5>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationReference" class="form-control"
-                formControlName="scheduledRemittanceInformationReference" [formGroup]="paymentForm"
-                placeholder="Remittance information reference">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="remittanceInformationUnstructured" class="form-control"
-                formControlName="scheduledRemittanceInformationUnstructured" [formGroup]="paymentForm"
-                placeholder="Remittance information unstructured">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="instructionIdentification" class="form-control"
-                formControlName="scheduledInstructionIdentification" [formGroup]="paymentForm"
-                placeholder="Instruction identification">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="requestedExecutionDateTime" class="form-control"
-                formControlName="scheduledRequestedExecutionDateTime" [formGroup]="paymentForm"
-                placeholder="Requested Execution Date Time">
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" id="endToEndIdentification" class="form-control"
-                formControlName="scheduledEndToEndIdentification" [formGroup]="paymentForm"
-                placeholder="End to end identification">
-            </mat-form-field>
-            <div *ngIf="deptorChecked">
-              <h5>Debtor account</h5>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountSchemeName" class="form-control"
-                  formControlName="scheduledDebtorAccountSchemeName" [formGroup]="paymentForm"
-                  placeholder="Debtor account scheme name">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountIdentification" class="form-control"
-                  formControlName="scheduledDebtorAccountIdentification" [formGroup]="paymentForm"
-                  placeholder="Debtor account identification">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput type="text" id="debtorAccountName" class="form-control"
-                  formControlName="scheduledDebtorAccountName" [formGroup]="paymentForm"
-                  placeholder="Debtor account name">
-              </mat-form-field>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Create Domestic Payments</mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion>
+                <mat-expansion-panel *ngFor="let domesticPayment of domesticPayments.controls; let domesticPaymentFormIndex = index;" [id]="'batch-domestic-payment-add-domestic-payment-accordion-'+domesticPaymentFormIndex">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>{{domesticPaymentFormIndex+1}}. Domestic Payment</mat-panel-title>
+                    <mat-panel-description>
+                      <i *ngIf="domesticPayments.controls.length>1"
+                      class="material-icons blue mat-expansion-panel-header-description"
+                        (click)="deleteDomesticPaymentFromArray(domesticPaymentFormIndex)">
+                        delete
+                      </i>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <form class="form-group" [formGroup]="domesticPaymentForm">
+                    <div formArrayName="domesticPayments">
+                      <div [formGroupName]="domesticPaymentFormIndex">
+                        <h4>{{domesticPaymentFormIndex+1}}. Domestic Payment</h4>
+                        <h5>Instructed amount</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-amount-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="instructedAmount" placeholder="Instructed amount">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-currency-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="instructedAmountCurrency"
+                            placeholder="Instructed amount currency">
+                        </mat-form-field>
+                        <h5>Creditor account</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-creditorAccountIdentification-'+domesticPaymentFormIndex" class="form-control"
+                            formControlName="creditorAccountIdentification"
+                            placeholder="Creditor account identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-name-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="creditorAccountName"
+                            placeholder="Creditor account name">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-secondaryIdentification-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="secondaryIdentification"
+                            placeholder="Secondary Identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-creditorAccountSchemeName-'+domesticPaymentFormIndex" class="form-control"
+                            formControlName="creditorAccountSchemeName" placeholder="Creditor account scheme name">
+                        </mat-form-field>
+                        <h5>Instant Payment Identifiers</h5>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-mobile-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="mobile"
+                            placeholder="Mobile">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-taxnumber-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="taxNumber"
+                            placeholder="Tax Number">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-taxpayer-identification-number-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="taxPayerIdentificationNumber"
+                            placeholder="Taxpayer Identification Number">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-email-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="email"
+                            placeholder="Email">
+                        </mat-form-field>
+                        <h5>Remittance information</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-remittanceInformationReference-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="remittanceInformationReference"
+                            placeholder="Remittance information reference">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-remittanceInformationUnstructured-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="remittanceInformationUnstructured"
+                            placeholder="Remittance information unstructured">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-instructionIdentification-'+domesticPaymentFormIndex" class="form-control"
+                            formControlName="instructionIdentification" placeholder="Instruction identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-payment-endToEndIdentification-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="endToEndIdentification"
+                            placeholder="End to end identification">
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-payment-request-to-pay-id-'+domesticPaymentFormIndex"
+                            class="form-control" formControlName="requestToPayId"
+                            placeholder="Request To Pay ID">
+                        </mat-form-field>
+                        <div>
+                          <h5>Local Instrument</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text" [id]="'create-batch-domestic-payment-localInstrument-'+domesticPaymentFormIndex"
+                              class="form-control" formControlName="localInstrument" placeholder="Local Instrument">
+                          </mat-form-field>
+                        </div>
+                        <div>
+                          <h5>Debtor account</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-debtorAccountSchemeName-'+domesticPaymentFormIndex" class="form-control"
+                              formControlName="debtorAccountSchemeName" placeholder="Debtor account scheme name">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-debtorAccountIdentification-'+domesticPaymentFormIndex" class="form-control"
+                              formControlName="debtorAccountIdentification" placeholder="Debtor account identification">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text" [id]="'create-batch-domestic-payment-debtorAccountName-'+domesticPaymentFormIndex"
+                              class="form-control" formControlName="debtorAccountName"
+                              placeholder="Debtor account name">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-accordion>
+            <mat-expansion-panel id="batch-domestic-payment-create-domestic-scheduled-payments-accordion">
+            <div class="add-batch-payment-div">
+              <i class="material-icons blue bring-forward"
+                (click)="addDomesticScheduledPaymentToArray()">
+                add_box
+              </i>
             </div>
-            <div class="create-payment">
-              <button [disabled]="createdConsentId.value.length == 0" type="submit"
-                mat-raised-button>{{'create' | uppercase}}</button>
-              <div *ngIf="domesticPaymentPaymentId" class="created-successfully">Successful payment creation</div>
-            </div>
-          </form>
-
+              <mat-expansion-panel-header>
+                <mat-panel-title>Create Domestic Scheduled Payments</mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion>
+                <mat-expansion-panel
+                  *ngFor="let domesticScheduledPayment of domesticScheduledPayments.controls; let domesticScheduledPaymentFormIndex = index;"
+                  [id]="'batch-domestic-payment-add-domestic-scheduled-payment-accordion-'+domesticScheduledPaymentFormIndex">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>{{domesticScheduledPaymentFormIndex+1}}. Domestic Scheduled Payment</mat-panel-title>
+                    <mat-panel-description>
+                      <i 
+                      *ngIf="domesticScheduledPayments.controls.length>1"
+                      class="material-icons blue mat-expansion-panel-header-description"
+                        (click)="deleteDomesticScheduledPaymentFromArray(domesticScheduledPaymentFormIndex)">
+                        delete
+                      </i>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <form [formGroup]="domesticScheduledPaymentForm">
+                    <div formArrayName="domesticScheduledPayments">
+                      <div [formGroupName]="domesticScheduledPaymentFormIndex">
+                        <h4>{{domesticScheduledPaymentFormIndex+1}}. Domestic Scheduled Payment</h4>
+                        <h5>Instructed amount</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-scheduled-payment-amount-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledInstructedAmount"
+                            placeholder="Instructed amount">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-scheduled-payment-currency-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledInstructedAmountCurrency"
+                            placeholder="Instructed amount currency">
+                        </mat-form-field>
+                        <h5>Creditor account</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-creditorAccountIdentification-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledCreditorAccountIdentification"
+                            placeholder="Creditor account identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" [id]="'create-batch-domestic-scheduled-payment-name-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledCreditorAccountName"
+                            placeholder="Creditor account name">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-scheduledSecondaryIdentification-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledSecondaryIdentification"
+                            placeholder="Secondary Identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-creditorAccountSchemeName-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledCreditorAccountSchemeName"
+                            placeholder="Creditor account scheme name">
+                        </mat-form-field>
+                        <h5>Remittance information</h5>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-remittanceInformationReference-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledRemittanceInformationReference"
+                            placeholder="Remittance information reference">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-remittanceInformationUnstructured-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledRemittanceInformationUnstructured"
+                            placeholder="Remittance information unstructured">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-instructionIdentification-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledInstructionIdentification"
+                            placeholder="Instruction identification">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-requestedExecutionDateTime-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledRequestedExecutionDateTime"
+                            placeholder="Requested Execution Date Time">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text"
+                            [id]="'create-batch-domestic-scheduled-payment-endToEndIdentification-'+domesticScheduledPaymentFormIndex"
+                            class="form-control" formControlName="scheduledEndToEndIdentification"
+                            placeholder="End to end identification">
+                        </mat-form-field>
+                        <div>
+                          <h5>Local Instrument</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-payment-scheduledLocalInstrument-'+domesticScheduledPaymentFormIndex" class="form-control"
+                              formControlName="scheduledLocalInstrument" placeholder="Local Instrument">
+                          </mat-form-field>
+                        </div>
+                        <div>
+                          <h5>Debtor account</h5>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-scheduled-payment-debtorAccountSchemeName-'+domesticScheduledPaymentFormIndex"
+                              class="form-control" formControlName="scheduledDebtorAccountSchemeName"
+                              placeholder="Debtor account scheme name">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-scheduled-payment-debtorAccountIdentification-'+domesticScheduledPaymentFormIndex"
+                              class="form-control" formControlName="scheduledDebtorAccountIdentification"
+                              placeholder="Debtor account identification">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput type="text"
+                              [id]="'create-batch-domestic-scheduled-payment-debtorAccountName-'+domesticScheduledPaymentFormIndex" class="form-control"
+                              formControlName="scheduledDebtorAccountName" placeholder="Debtor account name">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div class="create-payment create-payment-buttons batch-create-button">
+            <button id="batch-domestic-payment-create-button" [disabled]="createdConsentId.value.length == 0" type="submit"
+              (click)="createPayment(createdConsentId.value)" mat-raised-button>{{'create' | uppercase}}</button>
+            <div *ngIf="batchDomesticPaymentId" class="batch-created-successfully">Successful payment creation</div>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
       <mat-accordion>
-        <mat-expansion-panel class="nested-accordion get" [expanded]="domesticPaymentPaymentId ? true :false">
+        <mat-expansion-panel class="nested-accordion get" [expanded]="batchDomesticPaymentId ? true :false" id="get-batch-domestic-payment-accordion">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Get Batch Domestic Payment
@@ -402,28 +686,33 @@
             <p class="get-payment-title">Domestic Payment by payment ID</p>
           </div>
           <mat-form-field class="example-full-width">
-            <input class="add-consent-id" matInput placeholder="Payment ID" value="{{domesticPaymentPaymentId}}"
-              #paymentId>
+            <input id="get-batch-domestic-payment-payment-id" class="add-consent-id" matInput placeholder="Payment ID"
+              value="{{batchDomesticPaymentId}}" #paymentId>
           </mat-form-field>
-          <button name="get_data_by_consent_id" table_id="domestic-payment-consent-by-id-table" mat-raised-button
-            class="header-button-right" [disabled]="paymentId.value.length == 0" (click)="getPayment(paymentId.value)">{{'Get
+          <button id="batch-domestic-payment-get-data-button" name="get_data_by_consent_id" table_id="get-batch-domestic-payment-consent-by-id-table"
+            mat-raised-button class="header-button-right" [disabled]="paymentId.value.length == 0"
+            (click)="getPayment(paymentId.value)">{{'Get
                             data' | uppercase}}</button>
           <mat-card-content>
             <div *ngIf="domesticPaymentDataSource">
-              <mat-table id="account-by-id-table" #table [dataSource]="domesticPaymentDataSource">
+              <mat-table id="get-batch-domestic-payment-account-by-id-table" #table
+                [dataSource]="domesticPaymentDataSource">
                 <ng-container matColumnDef="status">
                   <mat-header-cell *matHeaderCellDef>Status </mat-header-cell>
-                  <mat-cell id="account-by-id-account-id" *matCellDef="let element"> {{element.Status}}
+                  <mat-cell id="get-batch-domestic-payment-account-by-id-account-id" *matCellDef="let element">
+                    {{element.Status}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="statusUpdateDateTime">
-                  <mat-header-cell *matHeaderCellDef class="identification-table-cell"> StatusUpdateDateTime </mat-header-cell>
-                  <mat-cell id="statusUpdateDateTime" *matCellDef="let element" class="identification-table-cell">
+                  <mat-header-cell *matHeaderCellDef class="identification-table-cell"> StatusUpdateDateTime
+                  </mat-header-cell>
+                  <mat-cell id="get-batch-domestic-payment-statusUpdateDateTime" *matCellDef="let element"
+                    class="identification-table-cell">
                     {{element.StatusUpdateDateTime | date: 'yyyy-MM-dd'}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="creationDateTime">
                   <mat-header-cell *matHeaderCellDef> CreationDateTime </mat-header-cell>
-                  <mat-cell id="creationDateTime" *matCellDef="let element">
+                  <mat-cell id="get-batch-domestic-payment-creationDateTime" *matCellDef="let element">
                     {{element.CreationDateTime | date: 'yyyy-MM-dd'}}
                   </mat-cell>
                 </ng-container>
@@ -441,7 +730,7 @@
                 <mat-row *matRowDef="let row; columns: domesticPaymentDisplayedColumns;"></mat-row>
               </mat-table>
               <div *ngIf="isEmptyPayment" class="empty-result-text">No results.</div>
-              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              <mat-paginator #batchDomesticPaymentPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-expansion-panel>

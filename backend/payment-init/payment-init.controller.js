@@ -27,11 +27,11 @@ router.get('/open-banking/v3.1/pisp/domestic-scheduled-payments/*', getDomesticS
 router.get('/open-banking/v3.1/pisp/domestic-standing-order-consents/*', getDomesticStandingOrderConsents);
 router.get('/open-banking/v3.1/pisp/domestic-standing-orders/*', getDomesticStandingOrder);
 router.get('/open-banking/v3.1/pisp/batch-domestic-payment-consents/*', getBatchDomesticPaymentConsents);
-router.get('/open-banking/v3.1/pisp/batch-domestic-payment/*', getBatchDomesticPayment);
+router.get('/open-banking/v3.1/pisp/batch-domestic-payments/*', getBatchDomesticPayments);
 router.get('/open-banking/v3.1/pisp/international-payment-consents/*', getInternationalPaymentConsents);
 router.get('/open-banking/v3.1/pisp/international-payments/*', getInternationalPayment);
 router.get('/open-banking/v3.1/pisp/batch-international-payment-consents/*', getBatchInternationalPaymentConsents);
-router.get('/open-banking/v3.1/pisp/batch-international-payment/*', getBatchInternationalPayment);
+router.get('/open-banking/v3.1/pisp/batch-international-payments/*', getBatchInternationalPayments);
 router.get('/open-banking/v3.1/pisp/international-scheduled-payment-consents/*', getInternationalScheduledPaymentConsents);
 router.get('/open-banking/v3.1/pisp/international-scheduled-payments/*', getInternationalScheduledPayment);
 
@@ -172,7 +172,7 @@ function getBatchDomesticPaymentConsents(req, res, next) {
     .catch(err => next(err));
 }
 
-function getBatchDomesticPayment(req, res, next) {
+function getBatchDomesticPayments(req, res, next) {
   _paymentService.getPayment(req, res)
     .catch(err => next(err));
 }
@@ -182,7 +182,7 @@ function getBatchInternationalPaymentConsents(req, res, next) {
     .catch(err => next(err));
 }
 
-function getBatchInternationalPayment(req, res, next) {
+function getBatchInternationalPayments(req, res, next) {
   _paymentService.getPayment(req, res)
     .catch(err => next(err));
 }

@@ -1,6 +1,17 @@
+.mat-expansion-panel-header-description {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 210px;
+  width: 10px;
+}
+
 mat-card {
   margin: auto;
   width: 100%;
+}
+
+h4 {
+  margin-top: 10px;
 }
 
 h4,
@@ -8,6 +19,15 @@ h3,
 h5 {
   margin-bottom: 20px;
   font-weight: bold;
+}
+
+.add-batch-payment-div {
+  margin-right: 35px;
+  margin-left:520px;
+  top: -45px;
+  position: relative; 
+  cursor:pointer; 
+  width: fit-content; 
 }
 
 .fb-logo-mini {
@@ -44,6 +64,10 @@ h5 {
 }
 
 /*material inputs placeholder and underline color*/
+
+/deep/ .mat-checkbox {
+  float: right;
+}
 
 /deep/.mat-focused .mat-form-field-label {
   color: #187697 !important;
@@ -82,12 +106,15 @@ h5 {
 
 .payment-header {
   display: flex;
+  margin-bottom: 45px;
 }
 
 .payment-header-right {
-  right: 100px;
+  right: 90px;
   position: absolute;
+  width: 175px;
 }
+
 
 .payment-data-subtitle {
   font-weight: bold;
@@ -142,4 +169,37 @@ h5 {
   color: green;
   padding-top: 10px;
   font-weight: bold;
+}
+
+.batch-created-successfully {
+  text-align: left;
+  width: 50%;
+  color: green;
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.material-icons.blue { 
+  color: #187697; 
+}
+
+.create-payment-buttons {
+  justify-content: space-between; 
+  align-items: center
+}
+
+.material-icons.vertical {
+  vertical-align: -6px;
+}
+
+.batch-create-button {
+  margin-top: 20px
+}
+
+.bring-forward {
+  z-index: 99999;
 }

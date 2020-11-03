@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { OBWriteBatchDomesticConsent2 } from '../../http';
@@ -7,7 +7,7 @@ import { AuthorizationService } from '../../http/api/authorization.service';
 import { ShowJsonDataDialog } from '../dialogs/show.json.data.dialog';
 import { BatchDomesticPaymentsService } from './../../http/api/batchDomesticPayments.service';
 import { PaymentConsentType } from './../../http/model/paymentType';
-import { AlertService, HelpersService  } from '../../_services';
+import { AlertService, HelpersService } from '../../_services';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -19,20 +19,19 @@ export class BatchDomesticPaymentsComponent implements OnInit {
   @Input() consent_id: string;
   emyptyAuthorization: string = '';
   keys = Object.keys;
-  paymentForm: FormGroup;
+  domesticPaymentForm: FormGroup;
+  domesticScheduledPaymentForm: FormGroup;
   emptyAuthorization: string = "";
-  consentDeptorChecked: boolean = false;
-  deptorChecked: boolean = false;
-  domesticPaymentPaymentId;
+  batchDomesticPaymentId;
   domesticPaymentConsentDataSource;
 
   domesticPaymentConsentDisplayedColumns: string[] = ['status', 'statusUpdateDateTime', 'creationDateTime', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentConsentPaginator: MatPaginator;
+  @ViewChild('batchDomesticPaymentConsentPaginator') domesticPaymentConsentPaginator: MatPaginator;
   isEmptyPaymentConsent;
 
   domesticPaymentDataSource;
   domesticPaymentDisplayedColumns: string[] = ['status', 'statusUpdateDateTime', 'creationDateTime', 'arrow'];
-  @ViewChild(MatPaginator) domesticPaymentPaginator: MatPaginator;
+  @ViewChild('batchDomesticPaymentPaginator') domesticPaymentPaginator: MatPaginator;
   isEmptyPayment;
 
   constructor(
@@ -46,39 +45,92 @@ export class BatchDomesticPaymentsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.paymentForm = this.formBuilder.group({
+    this.domesticPaymentForm = this.formBuilder.group({
+      domesticPayments: this.formBuilder.array([this.createDomesticPaymentGroup()])
+    });
+
+    this.domesticScheduledPaymentForm = this.formBuilder.group({
+      domesticScheduledPayments: this.formBuilder.array([this.createDomesticScheduledPaymentGroup()])
+    });
+  }
+
+  get domesticPayments() { 
+    return <FormArray>this.domesticPaymentForm.get('domesticPayments'); 
+  }
+
+  get domesticScheduledPayments() {
+    return <FormArray>this.domesticScheduledPaymentForm.get('domesticScheduledPayments'); 
+  }
+
+  createDomesticPaymentGroup(): FormGroup {
+    return this.formBuilder.group({
       instructedAmountCurrency: ['HUF'],
-      instructedAmount: ['1680.00'],
+      instructedAmount: ['100000.00'],
       instructionIdentification: ['mobilVallet123'],
       endToEndIdentification: ['29152852756654'],
       creditorAccountSchemeName: ['IBAN'],
-      creditorAccountIdentification: ['HU35120103740010183300200004'],
-      creditorAccountName: ['Deichmann Cipőkereskedelmi Korlátolt Felelősségű Társaság'],
-      debtorAccountSchemeName: ["IBAN"],
-      debtorAccountIdentification: ["HU23103000029321814060584399"],
+      creditorAccountIdentification: ['HU14120103740010183300300001'],
+      creditorAccountName: ['ACME Inc'],
+      secondaryIdentification: ['0002'],
+      debtorAccountSchemeName: ["BBAN"],
+      debtorAccountIdentification: ["141002132044784901000009"],
       debtorAccountName: ["Kiss Pista"],
       remittanceInformationReference: ["FRESCO-101"],
       remittanceInformationUnstructured: ["Internal ops code 5120101"],
+      localInstrument: [""],
+      mobile: [""],
+      taxNumber: [""],
+      taxPayerIdentificationNumber: [""],
+      email: [""],
+      requestToPayId: [""]
+    })
+  }
+
+  addDomesticPaymentToArray(): void {
+    this.domesticPayments.push(this.createDomesticPaymentGroup());
+  }
+
+  deleteDomesticPaymentFromArray(index: number): void {
+    if(this.domesticPayments.length > 1) {
+      this.domesticPayments.removeAt(index);
+    }
+  }
+
+  createDomesticScheduledPaymentGroup(): FormGroup {
+    return this.formBuilder.group({
       scheduledInstructedAmountCurrency: ['HUF'],
-      scheduledInstructedAmount: ['1680.00'],
+      scheduledInstructedAmount: ['100000.00'],
       scheduledInstructionIdentification: ['mobilVallet123'],
       scheduledEndToEndIdentification: ['29152852756654'],
-      scheduledRequestedExecutionDateTime: ['2018-08-06T00:00:00+00:00'],
+      scheduledRequestedExecutionDateTime: ['2020-08-06T00:00:00+00:00'],
       scheduledCreditorAccountSchemeName: ['IBAN'],
-      scheduledCreditorAccountIdentification: ['HU35120103740010183300200004'],
-      scheduledCreditorAccountName: ['Deichmann Cipőkereskedelmi Korlátolt Felelősségű Társaság'],
-      scheduledDebtorAccountSchemeName: ["IBAN"],
-      scheduledDebtorAccountIdentification: ["HU23103000029321814060584399"],
+      scheduledCreditorAccountIdentification: ['HU14120103740010183300300001'],
+      scheduledCreditorAccountName: ['ACME Inc'],
+      scheduledDebtorAccountSchemeName: ["BBAN"],
+      scheduledSecondaryIdentification: ['0002'],
+      scheduledDebtorAccountIdentification: ["141002132044784901000009"],
       scheduledDebtorAccountName: ["Kiss Pista"],
       scheduledRemittanceInformationReference: ["FRESCO-101"],
-      scheduledRemittanceInformationUnstructured: ["Internal ops code 5120101"]
-    });
+      scheduledRemittanceInformationUnstructured: ["Internal ops code 5120101"],
+      scheduledLocalInstrument: [""]
+    })
+  }
+
+  addDomesticScheduledPaymentToArray(): void {
+    this.domesticScheduledPayments.push(this.createDomesticScheduledPaymentGroup());
+  }
+
+  deleteDomesticScheduledPaymentFromArray(index: number): void {
+    if(this.domesticScheduledPayments.length > 1) {
+      this.domesticScheduledPayments.removeAt(index);
+    }
   }
 
   createPaymentConsent() {
     const idempotencyKey = this._helpersService.generateIdempotencyKey();
-    const paymentFormValue = this.paymentForm.value;
-    const createPaymentConsentBodyJson: OBWriteBatchDomesticConsent2 = this.createPaymentBody(paymentFormValue);
+    const domesticPaymentFormGroups = this.domesticPayments.controls;
+    const domesticScheduledPaymentFormGroups = this.domesticScheduledPayments.controls;
+    const createPaymentConsentBodyJson: OBWriteBatchDomesticConsent2 = this.createPaymentBody(domesticPaymentFormGroups, domesticScheduledPaymentFormGroups);
     this._batchDomesticPaymentsService.createBatchDomesticPaymentConsents(createPaymentConsentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
         this._cookieService.set('PAYMENT_TYPE', PaymentConsentType.BATCH_DOMESTIC_PAYMENT_CONSENT);
@@ -115,11 +167,12 @@ export class BatchDomesticPaymentsComponent implements OnInit {
 
   createPayment(consentId) {
     const idempotencyKey = this._helpersService.generateIdempotencyKey();
-    const paymentFormValue = this.paymentForm.value;
-    const createPaymentBodyJson = this.createPaymentBody(paymentFormValue, consentId.trim());
+    const domesticPaymentFormGroups = this.domesticPayments.controls;
+    const domesticScheduledPaymentFormGroups = this.domesticScheduledPayments.controls;
+    const createPaymentBodyJson = this.createPaymentBody(domesticPaymentFormGroups, domesticScheduledPaymentFormGroups, consentId.trim());
     this._batchDomesticPaymentsService.createBatchDomesticPayments(createPaymentBodyJson, this.emyptyAuthorization, idempotencyKey)
       .subscribe(result => {
-        this.domesticPaymentPaymentId = result.Data.DomesticPaymentId;
+        this.batchDomesticPaymentId = result.Data['BatchDomesticPaymentId'];
       },
         error => {
           this.alertService.error(error);
@@ -139,80 +192,112 @@ export class BatchDomesticPaymentsComponent implements OnInit {
       };
   }
 
-  createPaymentBody(paymentFormValue, consentId?) {
+  createPaymentBody(domesticPaymentFormGroups, domesticScheduledPaymentFormGroups, consentId?) {
+    const domesticPayments: Array<any> = this.createDomesticPaymentsArray(domesticPaymentFormGroups);
+    const domesticScheduledPayments: Array<any> = this.createDomesticScheduledPaymentsArray(domesticScheduledPaymentFormGroups);
+
     const body = {
       Data: {
         ConsentId: {},
-        DomesticPayments: [{
-          Initiation: {
-            InstructionIdentification: paymentFormValue.instructionIdentification,
-            EndToEndIdentification: paymentFormValue.endToEndIdentification,
-            InstructedAmount: {
-              Amount: paymentFormValue.instructedAmount,
-              Currency: paymentFormValue.instructedAmountCurrency
-            },
-            CreditorAccount: {
-              SchemeName: paymentFormValue.creditorAccountSchemeName,
-              Identification: paymentFormValue.creditorAccountIdentification,
-              Name: paymentFormValue.creditorAccountName
-            },
-            RemittanceInformation: {
-              Reference: paymentFormValue.remittanceInformationReference,
-              Unstructured: paymentFormValue.remittanceInformationUnstructured
-            },
-            DebtorAccount: {}
-          }
-        }],
-        DomesticScheduledPayments: [{
-          Permission: {},
-          Initiation: {
-            InstructionIdentification: paymentFormValue.scheduledInstructionIdentification,
-            EndToEndIdentification: paymentFormValue.scheduledEndToEndIdentification,
-            RequestedExecutionDateTime: paymentFormValue.scheduledRequestedExecutionDateTime,
-            InstructedAmount: {
-              Amount: paymentFormValue.scheduledInstructedAmount,
-              Currency: paymentFormValue.scheduledInstructedAmountCurrency
-            },
-            CreditorAccount: {
-              SchemeName: paymentFormValue.scheduledCreditorAccountSchemeName,
-              Identification: paymentFormValue.scheduledCreditorAccountIdentification,
-              Name: paymentFormValue.scheduledCreditorAccountName
-            },
-            RemittanceInformation: {
-              Reference: paymentFormValue.scheduledRemittanceInformationReference,
-              Unstructured: paymentFormValue.scheduledRemittanceInformationUnstructured
-            },
-            DebtorAccount: {}
-          }
-        }]
+        DomesticPayments: domesticPayments,
+        DomesticScheduledPayments: domesticScheduledPayments
       },
       Risk: {}
     }
 
     if (consentId) {
       body.Data.ConsentId = consentId;
-    } else {
-      body.Data.DomesticScheduledPayments[0].Permission = "Create";
-    }
-
-    if (this.consentDeptorChecked || this.deptorChecked) {
-      body.Data.DomesticScheduledPayments[0].Initiation.DebtorAccount = {
-        SchemeName: paymentFormValue.scheduledDebtorAccountSchemeName,
-        Identification: paymentFormValue.scheduledDebtorAccountIdentification,
-        Name: paymentFormValue.scheduledDebtorAccountName
-      }
-      body.Data.DomesticPayments[0].Initiation.DebtorAccount = {
-        SchemeName: paymentFormValue.debtorAccountSchemeName,
-        Identification: paymentFormValue.debtorAccountIdentification,
-        Name: paymentFormValue.debtorAccountName
-      }
     }
 
     let cleanedRequestBody = this._helpersService.cleanObjectsFromEmptyElements(body);
     cleanedRequestBody.Risk = {};
 
+    if (!cleanedRequestBody.Data) {
+      cleanedRequestBody.Data = {};
+      cleanedRequestBody.Data.DomesticPayments = [];
+      cleanedRequestBody.Data.DomesticScheduledPayments = [];
+    } else {
+      cleanedRequestBody.Data.DomesticPayments = cleanedRequestBody.Data.DomesticPayments ? cleanedRequestBody.Data.DomesticPayments : [];
+      cleanedRequestBody.Data.DomesticScheduledPayments = cleanedRequestBody.Data.DomesticScheduledPayments ? cleanedRequestBody.Data.DomesticScheduledPayments : [];
+    }
+
     const requestBody = JSON.parse(JSON.stringify(cleanedRequestBody));
     return requestBody;
+  }
+
+  createDomesticPaymentsArray(domesticPaymentFormGroups) {
+    let domesticPaymentsArray = [];
+    domesticPaymentFormGroups.map((formGroup) => {
+      domesticPaymentsArray.push({
+        Initiation: {
+          InstructionIdentification: formGroup.controls.instructionIdentification.value,
+            EndToEndIdentification: formGroup.controls.endToEndIdentification.value,
+              LocalInstrument: formGroup.controls.localInstrument.value,
+                InstructedAmount: {
+            Amount: formGroup.controls.instructedAmount.value,
+              Currency: formGroup.controls.instructedAmountCurrency.value
+          },
+          CreditorAccount: {
+            SchemeName: formGroup.controls.creditorAccountSchemeName.value,
+            Identification: formGroup.controls.creditorAccountIdentification.value,
+            Name: formGroup.controls.creditorAccountName.value,
+            SecondaryIdentification: formGroup.controls.secondaryIdentification.value,
+            InstantPaymentIdentifiers: {
+              Mobile: formGroup.controls.mobile.value,
+              TaxNumber: formGroup.controls.taxNumber.value,
+              TaxpayerIdentificationNumber: formGroup.controls.taxPayerIdentificationNumber.value,
+              EmailAddress: formGroup.controls.email.value
+            }
+          },
+          RemittanceInformation: {
+            Reference: formGroup.controls.remittanceInformationReference.value,
+              Unstructured: formGroup.controls.remittanceInformationUnstructured.value
+          },
+          DebtorAccount: {
+            SchemeName: formGroup.controls.debtorAccountSchemeName.value,
+              Identification: formGroup.controls.debtorAccountIdentification.value,
+                Name: formGroup.controls.debtorAccountName.value
+          },
+          RequestToPayId: formGroup.controls.requestToPayId.value
+        }
+      });
+    });
+    return domesticPaymentsArray;
+  }
+
+  createDomesticScheduledPaymentsArray(domesticScheduledPaymentFormGroups) {
+    let domesticScheduledPaymentsArray = [];
+    domesticScheduledPaymentFormGroups.map((formGroup) => {
+      domesticScheduledPaymentsArray.push({
+        Permission: {},
+        Initiation: {
+          InstructionIdentification: formGroup.controls.scheduledInstructionIdentification.value,
+          EndToEndIdentification: formGroup.controls.scheduledEndToEndIdentification.value,
+          RequestedExecutionDateTime: formGroup.controls.scheduledRequestedExecutionDateTime.value,
+          LocalInstrument: formGroup.controls.scheduledLocalInstrument.value,
+          InstructedAmount: {
+            Amount: formGroup.controls.scheduledInstructedAmount.value,
+            Currency: formGroup.controls.scheduledInstructedAmountCurrency.value
+          },
+          CreditorAccount: {
+            SchemeName: formGroup.controls.scheduledCreditorAccountSchemeName.value,
+            Identification: formGroup.controls.scheduledCreditorAccountIdentification.value,
+            Name: formGroup.controls.scheduledCreditorAccountName.value,
+            SecondaryIdentification: formGroup.controls.scheduledSecondaryIdentification.value
+          },
+          RemittanceInformation: {
+            Reference: formGroup.controls.scheduledRemittanceInformationReference.value,
+            Unstructured: formGroup.controls.scheduledRemittanceInformationUnstructured.value
+          },
+          DebtorAccount: {
+            SchemeName: formGroup.controls.scheduledDebtorAccountSchemeName.value,
+            Identification: formGroup.controls.scheduledDebtorAccountIdentification.value,
+            Name: formGroup.controls.scheduledDebtorAccountName.value
+          }
+        }
+      });
+    });
+    return domesticScheduledPaymentsArray;
   }
 
   openDataDetails(elementData) {

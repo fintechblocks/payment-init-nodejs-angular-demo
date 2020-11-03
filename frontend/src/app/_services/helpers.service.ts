@@ -25,12 +25,23 @@ export class HelpersService {
   }
 }
 /**clean request body recursively */
-function removeEmptyObjects(obj) {
-  return _(obj)
+function removeEmptyObjects(input) {  
+  if (typeof input == 'string' && !_.isEmpty(input)) {
+    return input;
+  }
+
+  if (_.isArray(input)) {
+    return  _(input)
+      .map(removeEmptyObjects)
+      .reject(_.isEmpty)
+      .value();
+  }  
+
+  return _(input)
     .pickBy(_.isObject) // pick objects only
     .mapValues(removeEmptyObjects) // call only for object values
     .omitBy(_.isEmpty) // remove all empty objects
-    .assign(_.omitBy(obj, isObjectOrEmpty)) // assign back primitive values
+    .assign(_.omitBy(input, isObjectOrEmpty)) // assign back primitive values
     .value();
 }
 

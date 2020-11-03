@@ -13,11 +13,18 @@ module.exports = {
   decodeJwt: decodeJwt
 }
 
-async function createClient(clientId, privateKey, tokenEndpointUri, authEndpointUri, issuer, jwksUri, keyID) {
+async function createClient(clientId, privateKey, tokenEndpointUri, authEndpointUri, issuer, jwksUri, keyID, clientCert, clientKey) {
   await checkKeyBitLength(privateKey);
-  Issuer.defaultHttpOptions = {
-    timeout: 120000
-  };
+  let options = {
+    timeout: 120000,
+    rejectUnauthorized: false
+  }
+  if (clientCert && clientKey) {
+    options.cert = clientCert;
+    options.key = clientKey;
+  }
+  Issuer.defaultHttpOptions = options;
+
   const token_endpoint_auth_signing_alg_values_supported = ["RS256"];
   const createdIssuer = new Issuer({
     token_endpoint: tokenEndpointUri,
@@ -30,7 +37,6 @@ async function createClient(clientId, privateKey, tokenEndpointUri, authEndpoint
   const keystore = jose.JWK.createKeyStore();
   const generatedKeyJson = await generateKeyStoreJson(privateKey, keyID);
   await keystore.add(generatedKeyJson);
-
   var client = new createdIssuer.Client({
     client_id: clientId,
     token_endpoint_auth_method: 'private_key_jwt',
