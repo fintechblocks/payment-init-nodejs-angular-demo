@@ -23,7 +23,7 @@
         "http-proxy": "^1.17.0",
         "jsonwebtoken": "^8.2.2",
         "mocha": "^5.2.0",
-        "mongodb": "^3.0.10",
+        "mongodb": "^3.1.13",
         "mongoose": "^5.1.4",
         "node-jose": "^1.0.0",
         "openid-client": "^2.2.1",
